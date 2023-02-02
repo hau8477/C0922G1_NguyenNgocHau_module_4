@@ -60,6 +60,9 @@
                 <td>
                     <form:button>Update</form:button>
                 </td>
+                <td>
+                    <form:button><a href="/email">Cancel</a></form:button>
+                </td>
             </tr>
         </table>
     </fieldset>
