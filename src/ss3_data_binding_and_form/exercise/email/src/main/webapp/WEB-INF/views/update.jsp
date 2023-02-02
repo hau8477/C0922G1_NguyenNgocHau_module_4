@@ -16,7 +16,7 @@
     <fieldset>
         <legend>Settings</legend>
         <table>
-            <tr hidden><form:input path="id" value="${email.getId()}"></form:input></tr>
+            <tr><form:hidden path="id" value="${email.getId()}"></form:hidden></tr>
             <tr>
                 <td>Languages:</td>
                 <td>
@@ -52,7 +52,7 @@
             <tr>
                 <td>Signature</td>
                 <td>
-                    <form:input path="signature" value="${email.getSignature()}"></form:input>
+                    <form:textarea path="signature"></form:textarea>
                 </td>
             </tr>
             <tr>
