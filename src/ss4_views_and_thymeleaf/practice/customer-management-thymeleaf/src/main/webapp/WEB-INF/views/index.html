@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+</head>
+<body>
+<h3>Customers</h3>
+<p>
+    <a th:href="@{/customers/create}">
+        Add new customer
+    </a>
+</p>
+
+<table id="customers">
+    <thead class="table-info">
+    <tr class="table-info">
+        <th>Name</th>
+        <th>Email</th>
+        <th>Address</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>View</th>
+    </tr>
+    </thead>
+    <tbody class="table-info">
+    <tr class="table-info" th:each="row,rowStat : ${customers}">
+        <td class="table-info" th:text="${row.getName()}"></td>
+        <td class="table-info" th:text="${row.getEmail()}"></td>
+        <td class="table-info" th:text="${row.getAddress()}"></td>
+        <td class="table-info"><a th:href="@{/customers/{id}/edit(id=${row.getId()})}">edit</a></td>
+        <td>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                    th:onclick="|info('${row.getId()}','${row.getName()}')|">
+                Delete
+            </button>
+        </td>
+        <td><a th:href="@{/customers/{id}/view(id=${row.getId()})}">view</a></td>
+    </tr>
+    </tbody>
+</table>
+<footer th:replace="/layout :: footer"></footer>
+</body>
+
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Delete</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <form action="/customers/delete" method="get">
+                    <input hidden type="number" id="idDelete" name="idDelete">
+                    <span>
+                        Bạn có chắc chắn muốn xóa <span style="color: red" id="nameDelete"></span>
+                    </span>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Delete</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function info(id, name) {
+        document.getElementById("idDelete").value = id;
+        document.getElementById("nameDelete").innerText = name;
+    }
+</script>
+</html>

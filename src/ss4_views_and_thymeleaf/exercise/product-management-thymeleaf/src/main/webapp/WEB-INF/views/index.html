@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+</head>
+<body>
+<navbar th:replace="/layout :: navbar"></navbar>
+<table class="table table-dark table-striped">
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>ID</th>
+        <th>Name smartphone</th>
+        <th>Brand</th>
+        <th>Prices</th>
+        <th>Edit</th>
+        <th>Delete</th>
+        <th>View</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="smartphone, iState : ${smartphones}">
+        <td th:text="${iState.count}"></td>
+        <td th:text="${smartphone.getId()}"></td>
+        <td th:text="${smartphone.getName()}"></td>
+        <td th:text="${smartphone.getBrand()}"></td>
+        <td th:text="${smartphone.getPrice()}"></td>
+        <td>Edit</td>
+        <td>Delete</td>
+        <td>View</td>
+    </tr>
+    </tbody>
+</table>
+<footer th:replace="/layout :: footer"></footer>
+</body>
+</html>

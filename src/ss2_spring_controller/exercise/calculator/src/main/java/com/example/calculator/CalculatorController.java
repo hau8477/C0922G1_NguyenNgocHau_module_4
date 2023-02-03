@@ -37,6 +37,8 @@ public class CalculatorController {
                 }
                 result = number1 / number2;
                 break;
+            default:
+
         }
         model.addAttribute("number1", number1);
         model.addAttribute("number2", number2);
