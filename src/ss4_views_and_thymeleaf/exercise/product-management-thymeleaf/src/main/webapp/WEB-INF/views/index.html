@@ -9,7 +9,7 @@
     Add new smartphone
 </button>
 <p th:text="${mess}"></p>
-<table class="table table-dark table-striped">
+<table class="table table-dark table-striped" id="table">
     <thead>
     <tr>
         <th>STT</th>
@@ -119,6 +119,20 @@
 
 
 </body>
+<!--Phân trang-->
+<script src="library/jquery/jquery-3.5.1.min.js"></script>
+<script src="library/datatables/js/jquery.dataTables.min.js"></script>
+<script src="library/datatables/js/dataTables.bootstrap5.min.js"></script>
+<script>
+    $(document).ready(function () {
+        $('#table').dataTable({
+                "dom": 'lrtip',
+                "lengthChange": false,
+                "pageLength": 7
+            }
+        )
+    })
+</script>
 <script>
     function info(id, name) {
         document.getElementById("idDelete").value = id;

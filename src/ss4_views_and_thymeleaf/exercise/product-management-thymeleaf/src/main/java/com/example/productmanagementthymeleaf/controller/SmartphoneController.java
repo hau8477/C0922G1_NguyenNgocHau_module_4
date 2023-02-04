@@ -53,4 +53,10 @@ public class SmartphoneController {
         model.addAttribute("smartphone", smartphoneService.findById(id));
         return "/view";
     }
+
+    @GetMapping("/search")
+    public String search(@RequestParam("search") String name, Model model) {
+        model.addAttribute("smartphones", smartphoneService.search(name));
+        return "/index";
+    }
 }

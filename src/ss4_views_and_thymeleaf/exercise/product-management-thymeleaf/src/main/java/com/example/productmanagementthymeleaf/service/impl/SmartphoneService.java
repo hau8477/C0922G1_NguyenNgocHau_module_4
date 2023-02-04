@@ -38,4 +38,9 @@ public class SmartphoneService implements ISmartphoneService {
     public SmartPhone findById(int id) {
         return smartphoneRepository.findById(id);
     }
+
+    @Override
+    public List<SmartPhone> search(String name) {
+        return smartphoneRepository.search(name);
+    }
 }

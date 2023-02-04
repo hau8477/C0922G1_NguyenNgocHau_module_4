@@ -14,4 +14,6 @@ public interface ISmartphoneRepository {
     void remove(int id);
 
     SmartPhone findById(int id);
+
+    List<SmartPhone> search(String name);
 }
