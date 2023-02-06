@@ -7,11 +7,11 @@ import java.util.List;
 public interface ISmartphoneRepository {
     List<SmartPhone> findAll();
 
-    void save(SmartPhone smartPhone);
+    boolean save(SmartPhone smartPhone);
 
-    void update(SmartPhone smartPhone);
+    boolean update(SmartPhone smartPhone);
 
-    void remove(int id);
+    boolean remove(int id);
 
     SmartPhone findById(int id);
 

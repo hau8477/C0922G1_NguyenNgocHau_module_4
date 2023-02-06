@@ -20,18 +20,18 @@ public class SmartphoneService implements ISmartphoneService {
     }
 
     @Override
-    public void save(SmartPhone smartPhone) {
-        smartphoneRepository.save(smartPhone);
+    public boolean save(SmartPhone smartPhone) {
+        return smartphoneRepository.save(smartPhone);
     }
 
     @Override
-    public void update(SmartPhone smartPhone) {
-        smartphoneRepository.update(smartPhone);
+    public boolean update(SmartPhone smartPhone) {
+        return smartphoneRepository.update(smartPhone);
     }
 
     @Override
-    public void remove(int id) {
-        smartphoneRepository.remove(id);
+    public boolean remove(int id) {
+       return smartphoneRepository.remove(id);
     }
 
     @Override

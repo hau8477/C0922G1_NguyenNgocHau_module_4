@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface ISmartphoneService {
     List<SmartPhone> findAll();
-    void save(SmartPhone smartPhone);
-    void update(SmartPhone smartPhone);
-    void remove(int id);
+    boolean save(SmartPhone smartPhone);
+    boolean update(SmartPhone smartPhone);
+    boolean remove(int id);
     SmartPhone findById(int id);
 
     List<SmartPhone> search(String name);

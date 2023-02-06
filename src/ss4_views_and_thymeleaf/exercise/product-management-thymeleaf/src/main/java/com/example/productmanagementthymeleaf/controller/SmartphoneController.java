@@ -15,17 +15,20 @@ public class SmartphoneController {
     private ISmartphoneService smartphoneService;
 
     @GetMapping("")
-    public String home(Model model) {
+    public String getHomePage(Model model) {
         model.addAttribute("smartphones", smartphoneService.findAll());
         model.addAttribute("smartphone", new SmartPhone());
         return "/index";
     }
 
     @PostMapping("/create")
-    public String create(@ModelAttribute("smartphone") SmartPhone smartPhone, RedirectAttributes attributes) {
-        smartPhone.setId((int) (Math.random() * 10000));
-        smartphoneService.save(smartPhone);
-        return "redirect: /smartphone";
+    public String create(@ModelAttribute("smartphone") SmartPhone smartPhone,RedirectAttributes attributes) {
+        if(smartphoneService.save(smartPhone)){
+            attributes.addFlashAttribute("mess","Add new Successful!");
+        } else {
+            attributes.addFlashAttribute("mess","Add new fail!");
+        }
+        return "redirect:/smartphone";
     }
 
     @GetMapping("/edit/{id}")
@@ -37,7 +40,7 @@ public class SmartphoneController {
     @PostMapping("/update")
     public String update(Model model, @ModelAttribute("smartphone") SmartPhone smartPhone) {
         smartphoneService.update(smartPhone);
-        model.addAttribute("message", "Update successful!");
+        model.addAttribute("mess", "Update successful!");
         return "/edit";
     }
 
@@ -45,11 +48,11 @@ public class SmartphoneController {
     public String delete(@RequestParam("idDelete") int id, RedirectAttributes attributes) {
         smartphoneService.remove(id);
         attributes.addFlashAttribute("mess", "Delete successful!");
-        return "redirect: /smartphone";
+        return "redirect:/smartphone";
     }
 
     @GetMapping("/view/{id}")
-    public String view(@PathVariable("id") int id, Model model) {
+    public String getViewPage(@PathVariable("id") int id, Model model) {
         model.addAttribute("smartphone", smartphoneService.findById(id));
         return "/view";
     }
