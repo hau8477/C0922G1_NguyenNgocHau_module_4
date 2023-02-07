@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+    <title>Information</title>
+</head>
+<body>
+<navbar th:replace="/layout :: navbar"></navbar>
+<h1>Information smartphone</h1>
+<div>
+    <div>
+        <label>Id:</label>
+        <label th:text="${smartphone.getId()}"></label>
+    </div>
+    <div>
+        <label>Name:</label>
+        <label th:text="${smartphone.getName()}"></label>
+    </div>
+    <div>
+        <label>Brand:</label>
+        <label th:text="${smartphone.getBrand()}"></label>
+    </div>
+    <div>
+        <label>Price:</label>
+        <label th:text="${smartphone.getPrice()}"></label>
+    </div>
+</div>
+<footer th:replace="/layout :: footer"></footer>
+</body>
+</html>

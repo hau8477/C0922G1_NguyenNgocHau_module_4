@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+</head>
+<body>
+<nav th:replace="/layout :: navbar"></nav>
+
+<form th:action="@{/update}" th:object="${blog}" method="post">
+    <div class="mb-3">
+        <input type="hidden" th:field="*{id}" class="form-control" id="exampleInputEmail112"
+               aria-describedby="emailHelp" disabled>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputEmail1" class="form-label">Title</label>
+        <input type="text" th:field="*{title}" class="form-control" id="exampleInputEmail1"
+               aria-describedby="emailHelp" disabled>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputEmail2" class="form-label">Author</label>
+        <input type="text" th:field="*{author}" class="form-control" id="exampleInputEmail2"
+               aria-describedby="emailHelp" disabled>
+    </div>
+    <div class="mb-3">
+        <label for="exampleInputEmail0" class="form-label">Content</label>
+        <input type="text" th:field="*{content}" class="form-control" id="exampleInputEmail0"
+               aria-describedby="emailHelp" disabled>
+    </div>
+</form>
+<footer th:replace="/layout :: footer"></footer>
+</body>
+</html>
