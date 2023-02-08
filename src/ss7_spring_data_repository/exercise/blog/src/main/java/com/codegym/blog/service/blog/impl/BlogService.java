@@ -21,6 +21,11 @@ public class BlogService implements IBlogService {
     }
 
     @Override
+    public Page<Blog> findByCategory(Long id, Pageable pageable) {
+        return blogRepository.findByCategory_Id(id, pageable);
+    }
+
+    @Override
     public void save(Blog blog) {
         blogRepository.save(blog);
     }

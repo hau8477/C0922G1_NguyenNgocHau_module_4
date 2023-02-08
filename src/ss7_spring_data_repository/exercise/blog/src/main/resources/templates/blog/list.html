@@ -9,6 +9,18 @@
         th:attr="onclick=|getDate()|">
     Add new blog
 </button>
+<form th:action="@{/list-blog-by-category}" method="get">
+    <div class="mb-3">
+        <label class="form-label">Category</label>
+        <select name="nameSearch" class="form-select" aria-label="Default select example">
+            <option th:each="category: ${categories}" th:text="${category.getName()}"
+                    th:value="${category.getId()}"></option>
+        </select>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </div>
+</form>
 <p th:text="${mess}"></p>
 <table class="table table-dark table-striped" id="table">
     <thead>
@@ -104,9 +116,10 @@
                                aria-describedby="emailHelp">
                     </div>
                     <div class="mb-3">
-                        <label  class="form-label">Category</label>
-                        <select th:field="*{category}"  class="form-select" aria-label="Default select example">
-                            <option th:each="category: ${categories}" th:text="${category.getName()}" th:value="${category.getId()}"></option>
+                        <label class="form-label">Category</label>
+                        <select th:field="*{category}" class="form-select" aria-label="Default select example">
+                            <option th:each="category: ${categories}" th:text="${category.getName()}"
+                                    th:value="${category.getId()}"></option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -155,12 +168,13 @@
         document.getElementById("nameDelete").innerText = title;
     }
 
-    function getDate(){
+    function getDate() {
         var today = new Date();
-        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate() + " " +
+        var date = today.getFullYear() + '-' + (today.getMonth() + 1) + '-' + today.getDate() + " " +
             today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
         document.getElementById("current-date").value = date;
     }
+
     setInterval(updateTime, 1000);
 </script>
 </html>
