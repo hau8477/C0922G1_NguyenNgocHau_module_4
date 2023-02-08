@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout::head">
+</head>
+<body>
+<nav th:replace="/layout::navbar"></nav>
+<th:block th:each="blog : ${blogs}">
+    <span>
+        <div class="card" style="width: 18rem;">
+        <div class="card-body">
+            <h5 class="card-title" th:text="${blog.getTitle()}"></h5>
+            Author: <h5 class="card-title" th:text="${blog.getAuthor()}"></h5>
+            Initialization date: <h5 class="card-title" th:text="${blog.getLocalDate()}"></h5>
+            <p class="card-text" th:text="${blog.getContent()}"></p>
+            <a th:href="@{/view-blog/{id}(id=${blog.getId()})}">
+                <button type="submit" class="btn btn-success">
+                    View
+                </button>
+            </a>
+        </div>
+    </div>
+    </span>
+</th:block>
+<footer th:replace="/layout::footer"></footer>
+</body>
+</html>

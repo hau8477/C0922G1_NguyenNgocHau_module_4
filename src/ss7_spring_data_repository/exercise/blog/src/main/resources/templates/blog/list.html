@@ -5,7 +5,8 @@
 <body>
 <navbar th:replace="/layout :: navbar"></navbar>
 <h1>List blog</h1>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal"
+        th:attr="onclick=|getDate()|">
     Add new blog
 </button>
 <p th:text="${mess}"></p>
@@ -14,6 +15,8 @@
     <tr>
         <th>STT</th>
         <th>ID</th>
+        <th>Initialization date</th>
+        <th>Category</th>
         <th>Title</th>
         <th>Author</th>
         <th>Content</th>
@@ -26,11 +29,13 @@
     <tr th:each="blog, iState : ${blogs}">
         <td th:text="${iState.count}"></td>
         <td th:text="${blog.getId()}"></td>
+        <td th:text="${blog.getLocalDate()}"></td>
+        <td th:text="${blog.getCategory().getName()}"></td>
         <td th:text="${blog.getTitle()}"></td>
         <td th:text="${blog.getAuthor()}"></td>
         <td th:text="${blog.getContent()}"></td>
         <td>
-            <a th:href="@{/edit/{id}(id=${blog.getId()})}">
+            <a th:href="@{/edit-blog/{id}(id=${blog.getId()})}">
                 <button type="submit" class="btn btn-warning">
                     Edit
                 </button>
@@ -38,13 +43,12 @@
         </td>
         <td>
             <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal1"
-            >
-                <!--                '${blog.getId()}', '${blog.getTitle()}'-->
+                    th:attr="onclick=|info('${blog.getId()}', '${blog.getTitle()}')|">
                 Delete
             </button>
         </td>
         <td>
-            <a th:href="@{/view/{id}(id=${blog.getId()})}">
+            <a th:href="@{/view-blog/{id}(id=${blog.getId()})}">
                 <button type="submit" class="btn btn-success">
                     View
                 </button>
@@ -53,6 +57,21 @@
     </tr>
     </tbody>
 </table>
+<!--phân trang-->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" th:if="${blogs.hasPrevious()}"
+               th:href="@{/list-blog(page=${blogs.number -1},nameSearch=${nameSearch})}">Previous</a>
+        </li>
+        <li class="page-item"><a class="page-link" th:href="@{/list-blog(page=0,nameSearch=${nameSearch})}">1</a></li>
+        <li class="page-item"><a class="page-link" th:href="@{/list-blog(page=1,nameSearch=${nameSearch})}">2</a></li>
+        <li class="page-item">
+            <a class="page-link" th:if="${blogs.hasNext()}"
+               th:href="@{/list-blog(page=${blogs.number +1},nameSearch=${nameSearch})}">Next</a>
+        </li>
+    </ul>
+</nav>
 <footer th:replace="/layout :: footer"></footer>
 
 <!--Modal create-->
@@ -64,7 +83,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/create}" th:object="${blog}" method="post">
+                <form th:action="@{/create-blog}" th:object="${blog}" method="post">
                     <div class="mb-3">
                         <input type="hidden" th:field="*{id}" class="form-control" id="exampleInputEmail1"
                                aria-describedby="emailHelp">
@@ -82,6 +101,17 @@
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Content</label>
                         <input type="text" th:field="*{content}" class="form-control" id="exampleInputEmail0"
+                               aria-describedby="emailHelp">
+                    </div>
+                    <div class="mb-3">
+                        <label  class="form-label">Category</label>
+                        <select th:field="*{category}"  class="form-select" aria-label="Default select example">
+                            <option th:each="category: ${categories}" th:text="${category.getName()}" th:value="${category.getId()}"></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="current-date" class="form-label">Initialization date</label>
+                        <input type="text" th:field="*{localDate}" class="form-control" id="current-date"
                                aria-describedby="emailHelp">
                     </div>
                     <div class="modal-footer">
@@ -103,7 +133,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/delete" method="get">
+                <form action="/delete-blog" method="get">
                     <input hidden type="number" id="idDelete" name="idDelete">
                     <span>
                         Bạn có chắc chắn muốn xóa <span style="color: red" id="nameDelete"></span>
@@ -124,5 +154,13 @@
         document.getElementById("idDelete").value = id;
         document.getElementById("nameDelete").innerText = title;
     }
+
+    function getDate(){
+        var today = new Date();
+        var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate() + " " +
+            today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+        document.getElementById("current-date").value = date;
+    }
+    setInterval(updateTime, 1000);
 </script>
 </html>
