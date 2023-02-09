@@ -12,10 +12,10 @@
 <form th:action="@{/list-blog-by-category}" method="get" id="submit">
     <div class="mb-3">
         <label class="form-label">Category</label>
-        <select th:value="category1" name="idSearch" class="form-select" aria-label="Default select example"
+        <select th:value="${category1}" name="idSearch" class="form-select" aria-label=""
         onchange="document.getElementById('submit').submit()">
             <option th:each="category: ${categories}" th:text="${category.getName()}"
-                    th:value="${category.getId()}"></option>
+                    th:value="${category.getId()}" th:selected="${category1 == category.getId()}"></option>
         </select>
     </div>
 </form>
@@ -72,10 +72,10 @@
     <ul class="pagination">
         <li class="page-item">
             <a class="page-link" th:if="${blogs.hasPrevious()}"
-               th:href="@{/list-blog(page=${blogs.number -1},nameSearch=${nameSearch})}">Previous</a>
+               th:href="@{/list-blog(page=${blogs.number -1},nameSearch=${nameSearch}, idSearch=${idSearch})}">Previous</a>
         </li>
-        <li class="page-item"><a class="page-link" th:href="@{/list-blog(page=0,nameSearch=${nameSearch})}">1</a></li>
-        <li class="page-item"><a class="page-link" th:href="@{/list-blog(page=1,nameSearch=${nameSearch})}">2</a></li>
+        <li class="page-item"><a class="page-link" th:href="@{/list-blog(page=0,nameSearch=${nameSearch}, idSearch=${idSearch})}">1</a></li>
+        <li class="page-item"><a class="page-link" th:href="@{/list-blog(page=1,nameSearch=${nameSearch}, idSearch=${idSearch})}">2</a></li>
         <li class="page-item">
             <a class="page-link" th:if="${blogs.hasNext()}"
                th:href="@{/list-blog(page=${blogs.number +1},nameSearch=${nameSearch})}">Next</a>
