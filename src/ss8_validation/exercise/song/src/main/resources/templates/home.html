@@ -98,9 +98,9 @@
 </div>
 
 <!--modal edit-->
-<div th:class="${hasError == 'true' ? 'modal fade show' : 'modal fade'}"
-     id="createModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
-     th:style="${hasError == 'true' ? 'display: block' : 'display: none'}">
+<div th:class="${hasError1 == 'true' ? 'modal fade show' : 'modal fade'}"
+     id="createModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true"
+     th:style="${hasError1 == 'true' ? 'display: block' : 'display: none'}">
     <div class="modal-dialog">
         <div class="modal-content">
             <form action="/edit" th:object="${songDTO}" method="post">
@@ -140,7 +140,7 @@
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Lưu</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            onclick="document.getElementById('createModal').style.display = 'none'">Thoát
+                            onclick="document.getElementById('createModal1').style.display = 'none'">Thoát
                     </button>
                 </div>
             </form>

@@ -58,7 +58,7 @@ public class SongController {
         if (bindingResult.hasErrors()) {
             model.addAttribute("songs", songService.findAll(pageable));
             model.addAttribute("songDTO", songDTO);
-            model.addAttribute("hasError", "true");
+            model.addAttribute("hasError1", "true");
             return "/home";
         }
 

@@ -12,15 +12,12 @@ import java.util.regex.Pattern;
 public class SongDTO implements Validator {
     private Long id;
 
-    @NotEmpty
     @NotNull
     private String name;
 
-    @NotEmpty
     @NotNull
     private String artist;
 
-    @NotEmpty
     @NotNull
     private String genre;
 
