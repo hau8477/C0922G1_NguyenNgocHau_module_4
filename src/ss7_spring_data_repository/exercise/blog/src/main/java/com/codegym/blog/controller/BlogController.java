@@ -48,6 +48,7 @@ public class BlogController {
         model.addAttribute("blog", new Blog());
         model.addAttribute("nameSearch", nameSearch);
         model.addAttribute("categories", categoryService.findAllCategory());
+        model.addAttribute("category1",categoryService.findById(nameSearch));
         return "/blog/list";
     }
 

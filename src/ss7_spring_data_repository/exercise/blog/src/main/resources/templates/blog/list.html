@@ -9,16 +9,14 @@
         th:attr="onclick=|getDate()|">
     Add new blog
 </button>
-<form th:action="@{/list-blog-by-category}" method="get">
+<form th:action="@{/list-blog-by-category}" method="get" id="submit">
     <div class="mb-3">
         <label class="form-label">Category</label>
-        <select name="nameSearch" class="form-select" aria-label="Default select example">
+        <select th:value="category1" name="nameSearch" class="form-select" aria-label="Default select example"
+        onchange="document.getElementById('submit').submit()">
             <option th:each="category: ${categories}" th:text="${category.getName()}"
                     th:value="${category.getId()}"></option>
         </select>
-    </div>
-    <div class="modal-footer">
-        <button type="submit" class="btn btn-primary">Search</button>
     </div>
 </form>
 <p th:text="${mess}"></p>
