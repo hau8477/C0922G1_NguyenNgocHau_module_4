@@ -12,7 +12,7 @@
 <form th:action="@{/list-blog-by-category}" method="get" id="submit">
     <div class="mb-3">
         <label class="form-label">Category</label>
-        <select th:value="category1" name="nameSearch" class="form-select" aria-label="Default select example"
+        <select th:value="category1" name="idSearch" class="form-select" aria-label="Default select example"
         onchange="document.getElementById('submit').submit()">
             <option th:each="category: ${categories}" th:text="${category.getName()}"
                     th:value="${category.getId()}"></option>
