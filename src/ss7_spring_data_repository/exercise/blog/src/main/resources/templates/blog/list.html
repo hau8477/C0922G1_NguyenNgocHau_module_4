@@ -73,13 +73,13 @@
     <ul class="pagination">
         <li class="page-item">
             <a class="page-link" th:if="${blogs.hasPrevious()}"
-               th:href="@{/list-blog(page=${blogs.number -1},nameSearch=${nameSearch})}">Previous</a>
+               th:href="@{/list-blog(page=${blogs.number -1},nameSearch=${nameSearch},idSearch=${category1})}">Previous</a>
         </li>
-        <li class="page-item"><a class="page-link" th:href="@{/list-blog(page=0,nameSearch=${nameSearch})}">1</a></li>
-        <li class="page-item"><a class="page-link" th:href="@{/list-blog(page=1,nameSearch=${nameSearch})}">2</a></li>
+        <li class="page-item"><a class="page-link" th:href="@{/list-blog(page=0,nameSearch=${nameSearch},idSearch=${category1})}">1</a></li>
+        <li class="page-item"><a class="page-link" th:href="@{/list-blog(page=1,nameSearch=${nameSearch},idSearch=${category1})}">2</a></li>
         <li class="page-item">
             <a class="page-link" th:if="${blogs.hasNext()}"
-               th:href="@{/list-blog(page=${blogs.number +1},nameSearch=${nameSearch})}">Next</a>
+               th:href="@{/list-blog(page=${blogs.number +1},nameSearch=${nameSearch},idSearch=${category1})}">Next</a>
         </li>
     </ul>
 </nav>
