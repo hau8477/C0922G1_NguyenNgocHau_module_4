@@ -99,8 +99,8 @@ public class UserDTO implements Validator {
     public void validate(Object target, Errors errors) {
         UserDTO userDTO = (UserDTO) target;
 
-        String phoneNumber1 = userDTO.phoneNumber;
-        ValidationUtils.rejectIfEmpty(errors, "phoneNumber", "phoneNumber.empty");
+        String phoneNumber1 = userDTO.getPhoneNumber();
+        ValidationUtils.rejectIfEmpty(errors, "phoneNumber1", "phoneNumber.empty");
         if (phoneNumber1.length() > 11 || phoneNumber1.length() < 10) {
             errors.rejectValue("phoneNumber", "phoneNumber.length");
         }

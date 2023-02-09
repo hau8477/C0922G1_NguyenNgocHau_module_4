@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Song</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+</head>
+<body>
+<button type="button"
+        class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal">
+    Thêm mới bài hát
+</button>
+<p th:text="${mess}"></p>
+</div>
+<table class="table table-success table-striped" id="table">
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>ID</th>
+        <th>Tên bài hát</th>
+        <th>Tên ca sĩ/ nhạc sĩ</th>
+        <th>Thể loại</th>
+        <th>Chỉnh sửa</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="song, iState : ${songs}">
+        <td th:text="${iState.count}"></td>
+        <td th:text="${song.getId()}"></td>
+        <td th:text="${song.getName()}"></td>
+        <td th:text="${song.getArtist()}"></td>
+        <td th:text="${song.getGenre()}"></td>
+        <td>
+            <button type="button"
+                    class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#createModal1"
+                    th:attr="onclick=|editSong('${song.getId()}','${song.getName()}',
+                '${song.getArtist()}','${song.getGenre()}')|">
+                Chỉnh sửa bài hát
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<!--phân trang-->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" th:if="${songs.hasPrevious()}"
+               th:href="@{/(page=${songs.number -1})}">Trang trước</a>
+        </li>
+        <span th:value="${songs.number+1}"></span>/
+        <span th:value="${songs.totalPages}"></span>
+        <li class="page-item">
+            <a class="page-link" th:if="${songs.hasNext()}"
+               th:href="@{/(page=${songs.number +1})}">Trang sau</a>
+        </li>
+    </ul>
+</nav>
+<!--modal create-->
+<div th:class="${hasError == 'true' ? 'modal fade show' : 'modal fade'}"
+     id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+     th:style="${hasError == 'true' ? 'display: block' : 'display: none'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/create" th:object="${songDTO}" method="post">
+                <div class="modal-header">
+                    <h1 style="text-align: center">Thêm mới bài hát</h1>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-4">Tên bài hát</div>
+                            <div class="col-md-8"><input class="form-control" th:field="*{name}"></div>
+                            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Ca sĩ/ nhạc sĩ</div>
+                            <div class="col-md-8"><input class="form-control" th:field="*{artist}"></div>
+                            <p th:if="${#fields.hasErrors('artist')}" th:errors="*{artist}"></p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Thể loại</div>
+                            <div class="col-md-8"><textarea class="form-control" th:field="*{genre}"></textarea></div>
+                            <p th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            onclick="document.getElementById('createModal').style.display = 'none'">Thoát
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!--modal edit-->
+<div th:class="${hasError == 'true' ? 'modal fade show' : 'modal fade'}"
+     id="createModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+     th:style="${hasError == 'true' ? 'display: block' : 'display: none'}">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <form action="/edit" th:object="${songDTO}" method="post">
+                <div class="modal-header">
+                    <h1 style="text-align: center">Chỉnh sửa bài hát</h1>
+                </div>
+                <div class="modal-body">
+                    <div class="modal-body">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <input hidden class="form-control" th:field="*{id}" id="id-edit">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Tên bài hát</div>
+                            <div class="col-md-8">
+                                <input class="form-control" th:field="*{name}" id="name-edit">
+                            </div>
+                            <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Ca sĩ/ nhạc sĩ</div>
+                            <div class="col-md-8">
+                                <input class="form-control" th:field="*{artist}" id="artist-edit">
+                            </div>
+                            <p th:if="${#fields.hasErrors('artist')}" th:errors="*{artist}"></p>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-4">Thể loại</div>
+                            <div class="col-md-8">
+                                <textarea class="form-control" th:field="*{genre}" id="genre-edit"></textarea>
+                            </div>
+                            <p th:if="${#fields.hasErrors('genre')}" th:errors="*{genre}"></p>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Lưu</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                            onclick="document.getElementById('createModal').style.display = 'none'">Thoát
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+        crossorigin="anonymous"></script>
+<script>
+    function editSong(id, name, artist, genre) {
+        document.getElementById("id-edit").value = id;
+        document.getElementById("name-edit").value = name;
+        document.getElementById("artist-edit").value = artist;
+        document.getElementById("genre-edit").value = genre;
+    }
+</script>
+</html>
