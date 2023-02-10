@@ -89,7 +89,7 @@
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Lưu</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            onclick="document.getElementById('createModal').style.display = 'none'">Thoát
+                            th:attr="onclick=|onCloseModal()|">Thoát
                     </button>
                 </div>
             </form>
@@ -140,7 +140,7 @@
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Lưu</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            onclick="document.getElementById('createModal1').style.display = 'none'">Thoát
+                            th:attr="onclick=|onCloseModal()|">Thoát
                     </button>
                 </div>
             </form>
@@ -157,6 +157,11 @@
         document.getElementById("name-edit").value = name;
         document.getElementById("artist-edit").value = artist;
         document.getElementById("genre-edit").value = genre;
+    }
+
+    function onCloseModal() {
+        document.getElementById('createModal').style.display = 'none';
+        window.location.href = "/";
     }
 </script>
 </html>
