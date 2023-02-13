@@ -1,6 +1,7 @@
 package com.example.bookmanagement.model;
 
 import com.sun.istack.NotNull;
+import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.*;
 
@@ -10,6 +11,7 @@ public class Borrower {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
+    @UniqueElements
     private String code;
     @ManyToOne
     @JoinColumn(name = "book_id")
