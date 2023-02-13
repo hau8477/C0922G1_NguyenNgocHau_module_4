@@ -140,7 +140,7 @@
                 <div class="modal-footer">
                     <button type="submit" class="btn btn-primary">Lưu</button>
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
-                            th:attr="onclick=|onCloseModal()|">Thoát
+                            th:attr="onclick=|onCloseModal1()|">Thoát
                     </button>
                 </div>
             </form>
@@ -161,6 +161,11 @@
 
     function onCloseModal() {
         document.getElementById('createModal').style.display = 'none';
+        window.location.href = "/";
+    }
+
+    function onCloseModal1() {
+        document.getElementById('createModal1').style.display = 'none';
         window.location.href = "/";
     }
 </script>
