@@ -7,6 +7,7 @@ import com.example.bookmanagement.service.IBookService;
 import com.example.bookmanagement.service.IBorrowerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -30,6 +31,7 @@ public class BookController {
     }
 
     @PostMapping("/borrow-book")
+    @Transactional
     public String borrowBook(@ModelAttribute("borrower") Borrower borrower, Model model) throws OutOfBookException {
         String code = borrowerService.setCodeBorrower();
         borrower.setCode(code);
