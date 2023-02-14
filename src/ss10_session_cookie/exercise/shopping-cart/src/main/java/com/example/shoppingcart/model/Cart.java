@@ -78,7 +78,7 @@ public class Cart {
 
     //Giảm số lượng sản phẩm
     public void decreaseQuantity(Product product){
-        //Nếu sản phẩm chưa tồn tại thì thêm sản phẩm vào với số lượng là 1
+        //Nếu sản phẩm chưa tồn tại thì return
         if (!checkItemInCart(product)) {
             return;
         } else {
@@ -86,7 +86,7 @@ public class Cart {
             Map.Entry<Product, Integer> itemEntry = selectItemInCard(product);
             assert itemEntry != null;
             if(itemEntry.getValue() == 1){
-                removeProduct(product);
+                removeProduct(itemEntry.getKey());
                 return;
             }
             // Giảm giá trị của số lượng đi 1
