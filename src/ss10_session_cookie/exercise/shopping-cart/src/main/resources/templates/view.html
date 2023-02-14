@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thông tin sản phẩm</title>
+</head>
+<body>
+<h1>Thông tin sản phẩm</h1>
+<form th:action="@{/shop}" th:object="${product}">
+    <table border="1">
+        <tr>
+            <td>Tên sản phẩm</td>
+            <td>Giá sản phẩm</td>
+            <td>Mô tả sản phẩm</td>
+        </tr>
+        <tr>
+            <td th:text="${product.get().getName()}"></td>
+            <td th:text="${product.get().getPrice()}"></td>
+            <td th:text="${product.get().getDescription()}"></td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Giỏ hàng của bạn</title>
+</head>
+<body>
+<a href="/shop">
+  Shop
+</a>
+<h1>Giỏ hàng của bạn</h1>
+<form th:action="@{/shop}" th:object="${cart}" method="post">
+    <h4>Tổng số lượng mặt hàng có trong giỏ: <span th:text="${cart.countItemQuantity()}"></span></h4>
+    <h4>Tổng số lượng sản phẩm có trong giỏ: <span th:text="${cart.countProductQuantity()}"></span></h4>
+    <p style="color: darkcyan" th:text="${mess}"></p>
+    <table border="1">
+        <tr>
+            <th>Sản phẩm</th>
+            <th>Số lượng</th>
+            <th>Giá sản phẩm</th>
+            <th></th>
+        </tr>
+        <tr th:each="product: ${cart.getProducts()}">
+            <td>
+                <a th:href="@{/view/{id}(id=${product.getKey().getId()})}" th:text="${product.getKey().getName()}"></a>
+            </td>
+            <td>
+                <a th:href="@{/remove/{id}(id=${product.getKey().getId()})}" th:text="${'-'}"></a>
+                <span th:text="${product.getValue()}"></span>
+                <a th:href="@{/add/{id}(id=${product.getKey().getId()},action='show')}" th:text="${'+'}"></a>
+            </td>
+            <td th:text="${product.getKey().getPrice()}"></td>
+            <td>
+                <a th:href="@{/remove/{id}(id=${product.getKey().getId()},action='delete')}" th:text="${'Xóa sản phẩm'}"></a>
+            </td>
+        </tr>
+        <tr>
+            <td>Tổng tiền: </td>
+            <td></td>
+            <td th:text="${cart.countTotalPayment()}"></td>
+            <td>
+                <a th:href="@{/pay}">Thanh toán</a>
+            </td>
+        </tr>
+    </table>
+</form>
+</body>
+</html>
