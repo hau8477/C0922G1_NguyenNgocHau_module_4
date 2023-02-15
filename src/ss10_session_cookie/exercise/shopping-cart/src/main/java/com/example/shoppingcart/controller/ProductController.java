@@ -66,8 +66,9 @@ public class ProductController {
 
     @GetMapping("/pay")
     public String solveMoney(RedirectAttributes redirectAttributes, @ModelAttribute Cart cart) {
+        float payment = cart.countTotalPayment();
         if (cart.removeAllProduct()) {
-            redirectAttributes.addFlashAttribute("mess", "Thanh toán thành công");
+            redirectAttributes.addFlashAttribute("mess", "Thanh toán thành công, tổng tiền là: " + payment );
         } else {
             redirectAttributes.addFlashAttribute("mess", "Giỏ hàng rỗng nên không thể thanh toán");
         }
