@@ -45,13 +45,14 @@
     // độ dài mặc định
     let size = 5;
     $(document).ready(function () {
-        findBlogByTitleContaining(size, "");
+        findBlogByTitleContaining();
     })
 
     // khai báo biến để nhận tổng số phần tử của trang
     let totalBogs;
 
-    function findBlogByTitleContaining(size, nameSearch) {
+    function findBlogByTitleContaining() {
+        let nameSearch = $('#nameSearch').val();
         let link = `http://localhost:8080/list-blog?size=${size}&nameSearch=${nameSearch}`;
         $.ajax({
             type: "GET",
@@ -83,19 +84,14 @@
     }
 
     $('#search').click(function () {
-        let nameSearch = $('#nameSearch').val();
-        findBlogByTitleContaining(5, nameSearch);
+        findBlogByTitleContaining();
         size = 5;
     });
 
     $('#loadMore').click(function () {
-        let nameSearch = $('#nameSearch').val();
         size += 10;
-        if (size < totalBogs) {
-            findBlogByTitleContaining(size, nameSearch);
-        } else {
-            findBlogByTitleContaining(totalBogs, nameSearch);
-        }
+        findBlogByTitleContaining();
+        findBlogByTitleContaining();
     });
 
 </script>
