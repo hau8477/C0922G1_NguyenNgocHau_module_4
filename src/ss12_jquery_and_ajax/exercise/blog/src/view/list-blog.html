@@ -48,9 +48,6 @@
         findBlogByTitleContaining();
     })
 
-    // khai báo biến để nhận tổng số phần tử của trang
-    let totalBogs;
-
     function findBlogByTitleContaining() {
         let nameSearch = $('#nameSearch').val();
         let link = `http://localhost:8080/list-blog?size=${size}&nameSearch=${nameSearch}`;
@@ -58,7 +55,6 @@
             type: "GET",
             url: link,
             success: function (data) {
-                totalBogs = data.totalElements;
                 console.log(data)
                 let tbody = '';
                 for (let i = 0; i < data.content.length; i++) {
