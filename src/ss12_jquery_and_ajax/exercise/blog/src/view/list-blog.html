@@ -84,13 +84,12 @@
     }
 
     $('#search').click(function () {
-        findBlogByTitleContaining();
         size = 5;
+        findBlogByTitleContaining();
     });
 
     $('#loadMore').click(function () {
         size += 10;
-        findBlogByTitleContaining();
         findBlogByTitleContaining();
     });
 
