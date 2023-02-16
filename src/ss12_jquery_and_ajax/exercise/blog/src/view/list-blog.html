@@ -42,11 +42,13 @@
 <button class="btn btn-outline-primary" id="loadMore">Load more</button>
 </body>
 <script>
+    // độ dài mặc định
     let size = 5;
     $(document).ready(function () {
         findBlogByTitleContaining(size, "");
     })
 
+    // khai báo biến để nhận tổng số phần tử của trang
     let totalBogs;
 
     function findBlogByTitleContaining(size, nameSearch) {
@@ -72,7 +74,7 @@
                         </tr>
                              `
                 }
-                $('#tbody').html(tbody)
+                $('#tbody').html(tbody);
             },
             fail: function (error) {
                 console.log(error)
