@@ -1,28 +1,32 @@
 package com.example.model.employee;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 public class EducationDegree {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+    @Size(max = 45)
+    @Column(columnDefinition = "varchar(45)", unique = true, nullable = false)
     private String name;
-    @Column(columnDefinition = "boolean default false")
-    private boolean isDeleted;
-
     @OneToMany(mappedBy = "educationDegree")
-    private List<Employee> employeeList;
+    @JsonBackReference
+    private Set<Employee> employees;
+    private boolean flag;
 
     public EducationDegree() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -34,19 +38,19 @@ public class EducationDegree {
         this.name = name;
     }
 
-    public boolean isDeleted() {
-        return isDeleted;
+    public Set<Employee> getEmployees() {
+        return employees;
     }
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void setEmployees(Set<Employee> employees) {
+        this.employees = employees;
     }
 
-    public List<Employee> getEmployeeList() {
-        return employeeList;
+    public boolean isFlag() {
+        return flag;
     }
 
-    public void setEmployeeList(List<Employee> employeeList) {
-        this.employeeList = employeeList;
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 }

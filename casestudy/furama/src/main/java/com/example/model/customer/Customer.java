@@ -1,40 +1,46 @@
 package com.example.model.customer;
 
 import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Customer {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
     @ManyToOne
     @JoinColumn(name = "customer_type_id", referencedColumnName = "id")
     private CustomerType customerType;
+    @Size(max = 45)
+    @Column(columnDefinition = "varchar(45)", nullable = false)
     private String name;
     private String dateOfBirth;
-    private int gender;
-
-    @Column(columnDefinition = "varchar(255) unique")
+    @Column(columnDefinition = "bit(1)")
+    private boolean gender;
+    @Size(max = 45)
+    @Column(columnDefinition = "varchar(45)", unique = true, nullable = false)
     private String idCard;
-
-    @Column(columnDefinition = "varchar(255) unique")
+    @Size(max = 45)
+    @Column(columnDefinition = "varchar(45)", unique = true)
     private String phoneNumber;
-
-    @Column(columnDefinition = "varchar(255) unique")
+    @Size(max = 45)
+    @Email
+    @Column(columnDefinition = "varchar(45)", unique = true)
     private String email;
+    @Size(max = 45)
+    @Column(columnDefinition = "varchar(45)")
     private String address;
-
-    @Column(columnDefinition = "boolean default false")
-    private boolean isDeleted;
+    private boolean flag;
 
     public Customer() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -62,11 +68,11 @@ public class Customer {
         this.dateOfBirth = dateOfBirth;
     }
 
-    public int getGender() {
+    public boolean isGender() {
         return gender;
     }
 
-    public void setGender(int gender) {
+    public void setGender(boolean gender) {
         this.gender = gender;
     }
 
@@ -102,11 +108,11 @@ public class Customer {
         this.address = address;
     }
 
-    public boolean isDeleted() {
-        return isDeleted;
+    public boolean isFlag() {
+        return flag;
     }
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 }

@@ -6,28 +6,32 @@ import javax.persistence.*;
 public class ContractDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
-
+    private Long id;
     @OneToOne
+    @JoinColumn(name = "contract_id", referencedColumnName = "id")
     private Contract contract;
-
-    @ManyToOne()
-    @JoinColumn(referencedColumnName = "id")
+    @ManyToOne
+    @JoinColumn(name = "attach_facility_id", referencedColumnName = "id")
     private AttachFacility attachFacility;
+    private int quantity;
+    private boolean flag;
 
-    private Integer quantity;
+    public boolean isFlag() {
+        return flag;
+    }
 
-    @Column(columnDefinition = "boolean default false")
-    private boolean isDeleted;
+    public void setFlag(boolean flag) {
+        this.flag = flag;
+    }
 
     public ContractDetail() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -47,19 +51,11 @@ public class ContractDetail {
         this.attachFacility = attachFacility;
     }
 
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
-
-    public Integer getQuantity() {
+    public int getQuantity() {
         return quantity;
     }
 
-    public void setQuantity(Integer quantity) {
+    public void setQuantity(int quantity) {
         this.quantity = quantity;
     }
 }

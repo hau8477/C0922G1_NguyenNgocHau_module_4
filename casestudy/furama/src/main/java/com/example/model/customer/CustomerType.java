@@ -1,28 +1,31 @@
 package com.example.model.customer;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 public class CustomerType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+    @Size(max = 255)
+    @Column(columnDefinition = "varchar(255)", nullable = false, unique = true)
     private String name;
     @OneToMany(mappedBy = "customerType")
-    private List<Customer> customerList;
-
-    @Column(columnDefinition = "boolean default false")
-    private boolean isDeleted;
+    @JsonBackReference
+    private Set<Customer> customerSet;
 
     public CustomerType() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -34,19 +37,11 @@ public class CustomerType {
         this.name = name;
     }
 
-    public List<Customer> getCustomerList() {
-        return customerList;
+    public Set<Customer> getCustomerSet() {
+        return customerSet;
     }
 
-    public void setCustomerList(List<Customer> customerList) {
-        this.customerList = customerList;
-    }
-
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void setCustomerSet(Set<Customer> customerSet) {
+        this.customerSet = customerSet;
     }
 }

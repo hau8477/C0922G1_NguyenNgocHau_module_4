@@ -3,25 +3,26 @@ package com.example.model.employee;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Entity
-public class Division {
+
+public class AppRole {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue
     private Long id;
-    @Size(max = 45)
-    @Column(columnDefinition = "varchar(45)", unique = true, nullable = false)
+    @Size(max = 255)
+    @NotNull
+    @Column(columnDefinition = "varchar(255)", unique = true, nullable = false)
     private String name;
-    @OneToMany(mappedBy = "division")
+    @ManyToMany(mappedBy = "roleSet")
     @JsonBackReference
-    private Set<Employee> employees;
+    private Set<AppUser> userSet;
     private boolean flag;
 
-
-
-    public Division() {
+    public AppRole() {
     }
 
     public Long getId() {
@@ -40,19 +41,19 @@ public class Division {
         this.name = name;
     }
 
-    public Set<Employee> getEmployees() {
-        return employees;
-    }
-
-    public void setEmployees(Set<Employee> employees) {
-        this.employees = employees;
-    }
-
     public boolean isFlag() {
         return flag;
     }
 
     public void setFlag(boolean flag) {
         this.flag = flag;
+    }
+
+    public Set<AppUser> getUserSet() {
+        return userSet;
+    }
+
+    public void setUserSet(Set<AppUser> userSet) {
+        this.userSet = userSet;
     }
 }

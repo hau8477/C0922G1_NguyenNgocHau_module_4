@@ -10,63 +10,32 @@ import javax.persistence.*;
 public class Contract {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
-
+    private Long id;
+    @ManyToOne
+    @JoinColumn(name = "customer_id" ,referencedColumnName = "id", nullable = false)
+    private Customer customer;
+    @ManyToOne
+    @JoinColumn(name = "employee_id", referencedColumnName = "id", nullable = false)
+    private Employee employee;
+    @ManyToOne
+    @JoinColumn(name = "facility_id", referencedColumnName = "id", nullable = false)
+    private Facility facility;
     private String startDate;
     private String endDate;
-    private Double deposit;
-
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
-    private Customer customer;
-
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
-    private Employee employee;
-
-    @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
-    private Facility facility;
-
-    @Column(columnDefinition = "boolean default false")
-    private boolean isDeleted;
-
+    private double deposit;
     @OneToOne(mappedBy = "contract")
     private ContractDetail contractDetail;
+    private boolean flag;
 
     public Contract() {
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(String startDate) {
-        this.startDate = startDate;
-    }
-
-    public String getEndDate() {
-        return endDate;
-    }
-
-    public void setEndDate(String endDate) {
-        this.endDate = endDate;
-    }
-
-    public Double getDeposit() {
-        return deposit;
-    }
-
-    public void setDeposit(Double deposit) {
-        this.deposit = deposit;
     }
 
     public Customer getCustomer() {
@@ -93,11 +62,43 @@ public class Contract {
         this.facility = facility;
     }
 
-    public boolean isDeleted() {
-        return isDeleted;
+    public String getStartDate() {
+        return startDate;
     }
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void setStartDate(String startDate) {
+        this.startDate = startDate;
+    }
+
+    public String getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public double getDeposit() {
+        return deposit;
+    }
+
+    public void setDeposit(double deposit) {
+        this.deposit = deposit;
+    }
+
+    public ContractDetail getContractDetail() {
+        return contractDetail;
+    }
+
+    public void setContractDetail(ContractDetail contractDetail) {
+        this.contractDetail = contractDetail;
+    }
+
+    public boolean isFlag() {
+        return flag;
+    }
+
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 }

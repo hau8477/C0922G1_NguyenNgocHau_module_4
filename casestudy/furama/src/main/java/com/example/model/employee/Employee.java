@@ -1,51 +1,55 @@
 package com.example.model.employee;
 
-import org.hibernate.validator.constraints.UniqueElements;
-
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
 
 @Entity
 public class Employee {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+    @Size(max = 45)
+    @Column(columnDefinition = "varchar(45)")
     private String name;
     private String dateOfBirth;
+    @Size(max = 45)
+    @Column(columnDefinition = "varchar(45)", unique = true)
     private String idCard;
-    private Double salary;
-
+    private double salary;
+    @Size(max = 45)
+    @Column(columnDefinition = "varchar(45)", unique = true)
     private String phoneNumber;
+    @Size(max = 45)
+    @Column(columnDefinition = "varchar(45)", unique = true)
+    @Email
     private String email;
+    @Size(max = 45)
+    @Column(columnDefinition = "varchar(45)")
     private String address;
-
     @ManyToOne
-    @JoinColumn(name = "position_id", referencedColumnName = "id")
+    @JoinColumn(name = "position_id", referencedColumnName = "id", nullable = false)
     private Position position;
-
-    @Column(columnDefinition = "boolean default false")
-    private boolean isDeleted;
-
-
     @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
+    @JoinColumn(name = "education_degree_id", referencedColumnName = "id", nullable = false)
     private EducationDegree educationDegree;
-
     @ManyToOne
-    @JoinColumn(referencedColumnName = "id")
+    @JoinColumn(name = "division_id", referencedColumnName = "id", nullable = false)
     private Division division;
-
     @OneToOne
-    private User user;
+    @Size(max = 255)
+    @JoinColumn(name = "username", referencedColumnName = "username", nullable = false)
+    private AppUser user;
+    private boolean flag;
 
     public Employee() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -73,11 +77,11 @@ public class Employee {
         this.idCard = idCard;
     }
 
-    public Double getSalary() {
+    public double getSalary() {
         return salary;
     }
 
-    public void setSalary(Double salary) {
+    public void setSalary(double salary) {
         this.salary = salary;
     }
 
@@ -129,20 +133,11 @@ public class Employee {
         this.division = division;
     }
 
-    public User getUser() {
-        return user;
+    public boolean isFlag() {
+        return flag;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
-
-    public boolean isDeleted() {
-        return isDeleted;
-    }
-
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
-    }
-
 }

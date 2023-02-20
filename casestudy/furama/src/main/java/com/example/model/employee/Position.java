@@ -1,28 +1,32 @@
 package com.example.model.employee;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 public class Position {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+    @Size(max = 45)
+    @Column(columnDefinition = "varchar(45)", unique = true, nullable = false)
     private String name;
-
     @OneToMany(mappedBy = "position")
-    private List<Employee> employeeList;
+    @JsonBackReference
+    private Set<Employee> employeeList;
+    private boolean flag;
 
-    @Column(columnDefinition = "boolean default false")
-private boolean isDeleted;
     public Position() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -34,19 +38,19 @@ private boolean isDeleted;
         this.name = name;
     }
 
-    public List<Employee> getEmployeeList() {
+    public Set<Employee> getEmployeeList() {
         return employeeList;
     }
 
-    public void setEmployeeList(List<Employee> employeeList) {
+    public void setEmployeeList(Set<Employee> employeeList) {
         this.employeeList = employeeList;
     }
 
-    public boolean isDeleted() {
-        return isDeleted;
+    public boolean isFlag() {
+        return flag;
     }
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 }

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+
+</head>
+<body>
+<nav th:replace="/layout :: nav"></nav>
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+    Add new customer
+</button>
+<table class="table">
+    <thead>
+    <th>STT</th>
+    <th>Địa chỉ</th>
+    <th>Ngày sinh</th>
+    <th>Email</th>
+    <th>Giới tính</th>
+    <th>CMND/CCCD</th>
+    <th>Tên khách hàng</th>
+    <th>Số điện thoại</th>
+    <th>Loại khách</th>
+    <th>Chỉnh sửa</th>
+    <th>Xóa</th>
+    </thead>
+    <tbody>
+    <tr th:each="customer, iState: ${customers}">
+        <td th:text="${iState.count}"></td>
+        <td th:text="${customer.getAddress()}"></td>
+        <td th:text="${customer.getDateOfBirth()}"></td>
+        <td th:text="${customer.getEmail()}"></td>
+        <td><span th:text="${customer.isGender() == true} ? 'Nam' : 'Nữ'" ></span></td>
+        <td th:text="${customer.getIdCard()}"></td>
+        <td th:text="${customer.getName()}"></td>
+        <td th:text="${customer.getPhoneNumber()}"></td>
+        <td th:text="${customer.getCustomerType().getName()}"></td>
+        <td></td>
+        <td></td>
+    </tr>
+    </tbody>
+</table>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" th:if="${customers.hasPrevious()}"
+               th:href="@{/customer(page=${customers.number -1},nameSearch=${nameSearch},
+               emailSearch=${emailSearch},customerTypeId=${customerTypeId})}">Previous</a>
+        </li>
+        <li class="page-item"><a class="page-link" th:href="@{/customer(page=0,nameSearch=${nameSearch},
+        emailSearch=${emailSearch},customerTypeId=${customerTypeId})}">1</a></li>
+        <li class="page-item"><a class="page-link" th:href="@{/customer(page=1,nameSearch=${nameSearch},
+        emailSearch=${emailSearch},customerTypeId=${customerTypeId})}">2</a></li>
+        <li class="page-item">
+            <a class="page-link" th:if="${customers.hasNext()}"
+               th:href="@{/customer(page=${customers.number +1},nameSearch=${nameSearch},
+               emailSearch=${emailSearch},customerTypeId=${customerTypeId})}">Next</a>
+        </li>
+    </ul>
+</nav>
+
+<footer th:replace="/layout :: footer"></footer>
+<%--Modal create--%>
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel1">Theme mới khách hàng</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="/customers/create" method="post" th:object="${customer}">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Họ và tên</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                               placeholder="VD: Nguyễn Văn An" name="name" required th:field="*{name}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Ngày sinh</label>
+                        <input type="date" class="form-control" id="exampleInputPassword1" placeholder="1970-11-07"
+                               name="dayOfBirth" th:field="*{dateOfBirth}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Gender</label><br>
+                        <input type="radio" name="gender" checked value="Nam">Nam
+                        <input type="radio" name="gender" value="Nữ">Nữ
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail2" class="form-label">ID card</label>
+                        <input type="text" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp"
+                               placeholder="VD: 13549681324" name="idCard">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail4" class="form-label">Phone number</label>
+                        <input type="number" class="form-control" id="exampleInputEmail4" aria-describedby="emailHelp"
+                               placeholder="VD: 4562317861" name="phoneNumber">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail5" class="form-label">Email address</label>
+                        <input type="email" class="form-control" id="exampleInputEmail5" aria-describedby="emailHelp"
+                               placeholder="VD: annguyen@gamil.com" name="email" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail6" class="form-label">Address</label>
+                        <input type="text" class="form-control" id="exampleInputEmail6" aria-describedby="emailHelp"
+                               placeholder="VD: 22 Yên Bái, Đà Nẵng" name="address">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail6" class="form-label">Customer type</label>
+                        <select th:field="*{category}" class="form-select" aria-label="Default select example">
+                            <option th:each="category: ${categories}" th:text="${category.getName()}"
+                                    th:value="${category.getId()}"></option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Save customer</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

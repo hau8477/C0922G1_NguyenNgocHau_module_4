@@ -1,28 +1,29 @@
 package com.example.model.facility;
 
 import javax.persistence.*;
-import java.util.List;
+import javax.validation.constraints.Size;
+import java.util.Set;
 
 @Entity
 public class FacilityType {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    private Long id;
+    @Size(max = 45)
+    @Column(columnDefinition = "varchar(45)", unique = true, nullable = false)
     private String name;
-    @Column(columnDefinition = "boolean default false")
-    private boolean isDeleted;
-
     @OneToMany(mappedBy = "facilityType")
-    private List<Facility> facilityList;
+    private Set<Facility> facilitySet;
+    private boolean flag;
 
     public FacilityType() {
     }
 
-    public int getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -34,19 +35,19 @@ public class FacilityType {
         this.name = name;
     }
 
-    public boolean isDeleted() {
-        return isDeleted;
+    public Set<Facility> getFacilitySet() {
+        return facilitySet;
     }
 
-    public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+    public void setFacilitySet(Set<Facility> facilitySet) {
+        this.facilitySet = facilitySet;
     }
 
-    public List<Facility> getFacilityList() {
-        return facilityList;
+    public boolean isFlag() {
+        return flag;
     }
 
-    public void setFacilityList(List<Facility> facilityList) {
-        this.facilityList = facilityList;
+    public void setFlag(boolean flag) {
+        this.flag = flag;
     }
 }
