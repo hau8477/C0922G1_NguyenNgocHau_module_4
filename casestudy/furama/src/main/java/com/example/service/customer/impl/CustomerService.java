@@ -29,12 +29,22 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public boolean save(Customer customer) {
+        Optional<Customer> optionalCustomer = this.customerRepository.findByIdCard(customer.getIdCard());
+        Optional<Customer> optionalCustomer1 = this.customerRepository.findByPhoneNumber(customer.getPhoneNumber());
+        Optional<Customer> optionalCustomer2 = this.customerRepository.findByEmail(customer.getEmail());
+        if(optionalCustomer.isPresent() || optionalCustomer1.isPresent() || optionalCustomer2.isPresent()){
+            return false;
+        }
         this.customerRepository.save(customer);
         return true;
     }
 
     @Override
     public boolean update(Customer customer) {
+        Optional<Customer> optionalCustomer = this.customerRepository.findById(customer.getId());
+        if(!optionalCustomer.isPresent()){
+            return false;
+        }
         this.customerRepository.save(customer);
         return true;
     }
@@ -45,7 +55,16 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
+    public Optional<Customer> findByIdCard(String idCard) {
+        return this.customerRepository.findByIdCard(idCard);
+    }
+
+    @Override
     public boolean removeById(Long id) {
+        Optional<Customer> optionalCustomer = this.customerRepository.findById(id);
+        if(!optionalCustomer.isPresent()){
+            return false;
+        }
         this.customerRepository.deleteById(id);
         return true;
     }

@@ -7,12 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 @Controller
 @RequestMapping("/customers")
@@ -41,5 +39,34 @@ public class CustomerController {
         model.addAttribute("customerTypes", this.customerTypeService.findAll());
         model.addAttribute("customer", new Customer());
         return "/customer/list";
+    }
+
+    @PostMapping("/create")
+    public String save(@ModelAttribute Customer customer, RedirectAttributes redirectAttributes){
+        if(this.customerService.save(customer)){
+            redirectAttributes.addFlashAttribute("mess","Thêm mới khách hàng thành công");
+        } else {
+            redirectAttributes.addFlashAttribute("mess","Thông tin khách hàng đã tồn tại");
+        }
+        return "redirect:/customers/";
+    }
+
+    @PostMapping("/update")
+    public String update(@ModelAttribute Customer customer, RedirectAttributes redirectAttributes){
+        if(this.customerService.update(customer)){
+            redirectAttributes.addFlashAttribute("mess","Chỉnh sửa thành công");
+        } else {
+            redirectAttributes.addFlashAttribute("mess","Chỉnh sửa thất bại");
+        }
+        return "redirect:/customers/";
+    }
+    @PostMapping("/delete")
+    public String delete(@RequestParam("idDelete") Long id, RedirectAttributes redirectAttributes){
+        if(this.customerService.removeById(id)){
+            redirectAttributes.addFlashAttribute("mess","Xóa khách hàng thành công");
+        }else {
+            redirectAttributes.addFlashAttribute("mess","Xóa khách hàng thất bại");
+        }
+        return "redirect:/customers/";
     }
 }

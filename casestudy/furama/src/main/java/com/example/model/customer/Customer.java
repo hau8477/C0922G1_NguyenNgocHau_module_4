@@ -31,7 +31,7 @@ public class Customer {
     @Size(max = 45)
     @Column(columnDefinition = "varchar(45)")
     private String address;
-    private boolean flag;
+    private boolean flag = true;
 
     public Customer() {
     }

@@ -5,9 +5,17 @@
 </head>
 <body>
 <nav th:replace="/layout :: nav"></nav>
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Add new customer
-</button>
+<form th:action="@{/customers}" method="get" class="d-flex" role="search">
+    <input class="form-control me-2" type="search" placeholder="Tên khách hàng" aria-label="Search" name="nameSearch">
+    <input class="form-control me-2" type="search" placeholder="Email khách hàng" aria-label="Search" name="emailSearch">
+    <select name="customerTypeId" class="form-select" aria-label="Default select example">
+        <option th:each="customerType : ${customerTypes}" th:value="${customerType.getId()}"
+        th:text="${customerType.getName()}">
+        </option>
+    </select>
+    <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
+</form>
+<p th:text="${mess}" style="color: red"></p>
 <table class="table">
     <thead>
     <th>STT</th>
@@ -19,7 +27,7 @@
     <th>Tên khách hàng</th>
     <th>Số điện thoại</th>
     <th>Loại khách</th>
-    <th>Chỉnh sửa</th>
+    <th></th>
     <th>Xóa</th>
     </thead>
     <tbody>
@@ -28,11 +36,43 @@
         <td th:text="${customer.getAddress()}"></td>
         <td th:text="${customer.getDateOfBirth()}"></td>
         <td th:text="${customer.getEmail()}"></td>
-        <td><span th:text="${customer.isGender() == true} ? 'Nam' : 'Nữ'" ></span></td>
+        <td><span th:text="${customer.isGender() == true} ? 'Nam' : 'Nữ'"></span></td>
         <td th:text="${customer.getIdCard()}"></td>
         <td th:text="${customer.getName()}"></td>
         <td th:text="${customer.getPhoneNumber()}"></td>
         <td th:text="${customer.getCustomerType().getName()}"></td>
+        <td>
+            <button th:attr="onclick=|getInfoCustomerEdit('${customer.getId()}', '${customer.getName()}',
+                                    '${customer.getDateOfBirth()}', '${customer.isGender()}', '${customer.getIdCard()}',
+                                    '${customer.getPhoneNumber()}', '${customer.getEmail()}', '${customer.getAddress()}',
+                                    '${customer.getCustomerType()}'
+                                    )|" type="button" class="btn btn-warning" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal1">
+                 Sửa
+            </button>
+        </td>
+        <td>
+            <button th:attr="onclick=|getInfoCustomerDelete('${customer.getId()}', '${customer.getName()}')|"
+                    type="button" class="btn btn-danger" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal3">
+                Xóa
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <td></td>
+        <td>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Thêm mới khách hàng
+            </button>
+        </td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
+        <td></td>
         <td></td>
         <td></td>
     </tr>
@@ -42,77 +82,176 @@
     <ul class="pagination">
         <li class="page-item">
             <a class="page-link" th:if="${customers.hasPrevious()}"
-               th:href="@{/customer(page=${customers.number -1},nameSearch=${nameSearch},
+               th:href="@{/customers(page=${customers.number -1},nameSearch=${nameSearch},
                emailSearch=${emailSearch},customerTypeId=${customerTypeId})}">Previous</a>
         </li>
-        <li class="page-item"><a class="page-link" th:href="@{/customer(page=0,nameSearch=${nameSearch},
+        <li class="page-item"><a class="page-link" th:href="@{/customers(page=0,nameSearch=${nameSearch},
         emailSearch=${emailSearch},customerTypeId=${customerTypeId})}">1</a></li>
-        <li class="page-item"><a class="page-link" th:href="@{/customer(page=1,nameSearch=${nameSearch},
+        <li class="page-item"><a class="page-link" th:href="@{/customers(page=1,nameSearch=${nameSearch},
         emailSearch=${emailSearch},customerTypeId=${customerTypeId})}">2</a></li>
         <li class="page-item">
             <a class="page-link" th:if="${customers.hasNext()}"
-               th:href="@{/customer(page=${customers.number +1},nameSearch=${nameSearch},
+               th:href="@{/customers(page=${customers.number +1},nameSearch=${nameSearch},
                emailSearch=${emailSearch},customerTypeId=${customerTypeId})}">Next</a>
         </li>
     </ul>
 </nav>
 
 <footer th:replace="/layout :: footer"></footer>
-<%--Modal create--%>
+<!--Modal create-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel1">Theme mới khách hàng</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel1">Thêm mới khách hàng</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="/customers/create" method="post" th:object="${customer}">
+                <form th:action="@{/customers/create}" method="post" th:object="${customer}">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Họ và tên</label>
                         <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
-                               placeholder="VD: Nguyễn Văn An" name="name" required th:field="*{name}">
+                               placeholder="VD: Nguyễn Văn An" required th:field="*{name}">
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Ngày sinh</label>
                         <input type="date" class="form-control" id="exampleInputPassword1" placeholder="1970-11-07"
-                               name="dayOfBirth" th:field="*{dateOfBirth}">
+                               th:field="*{dateOfBirth}">
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Gender</label><br>
-                        <input type="radio" name="gender" checked value="Nam">Nam
-                        <input type="radio" name="gender" value="Nữ">Nữ
+                        <label for="exampleInputPassword1" class="form-label">Giới tính</label><br>
+                        <label for="gender1"><input class="ms-3 me-1" checked type="radio" th:field="*{gender}"
+                                                    id="gender1" th:value='true'>
+                            Nam
+                        </label>
+                        <label for="gender2"><input class="ms-3 me-1" type="radio" th:field="*{gender}" id="gender2"
+                                                    th:value='false'>
+                            Nữ
+                        </label>
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputEmail2" class="form-label">ID card</label>
+                        <label for="exampleInputEmail2" class="form-label">CCCD/CMND</label>
                         <input type="text" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp"
-                               placeholder="VD: 13549681324" name="idCard">
+                               placeholder="VD: 13549681324" th:field="*{idCard}">
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputEmail4" class="form-label">Phone number</label>
-                        <input type="number" class="form-control" id="exampleInputEmail4" aria-describedby="emailHelp"
-                               placeholder="VD: 4562317861" name="phoneNumber">
+                        <label for="exampleInputEmail4" class="form-label">Số điện thoại</label>
+                        <input type="text" class="form-control" id="exampleInputEmail4" aria-describedby="emailHelp"
+                               placeholder="VD: 4562317861" th:field="*{phoneNumber}">
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputEmail5" class="form-label">Email address</label>
+                        <label for="exampleInputEmail5" class="form-label">Email</label>
                         <input type="email" class="form-control" id="exampleInputEmail5" aria-describedby="emailHelp"
-                               placeholder="VD: annguyen@gamil.com" name="email" required>
+                               placeholder="VD: annguyen@gamil.com" th:field="*{email}" required>
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputEmail6" class="form-label">Address</label>
+                        <label for="exampleInputEmail6" class="form-label">Địa chỉ</label>
                         <input type="text" class="form-control" id="exampleInputEmail6" aria-describedby="emailHelp"
-                               placeholder="VD: 22 Yên Bái, Đà Nẵng" name="address">
+                               placeholder="VD: 22 Yên Bái, Đà Nẵng" th:field="*{address}">
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputEmail6" class="form-label">Customer type</label>
-                        <select th:field="*{category}" class="form-select" aria-label="Default select example">
-                            <option th:each="category: ${categories}" th:text="${category.getName()}"
-                                    th:value="${category.getId()}"></option>
+                        <label for="exampleInputEmail6" class="form-label">Loại khách</label>
+                        <select th:field="*{customerType}" class="form-select" aria-label="Default select example">
+                            <option th:each="customerType: ${customerTypes}" th:text="${customerType.getName()}"
+                                    th:value="${customerType.getId()}"></option>
                         </select>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                        <button type="submit" class="btn btn-primary">Save customer</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal edit-->
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Chỉnh sửa thông tin khách hàng</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/customers/update}" method="post" th:object="${customer}">
+                    <input type="number" hidden id="id1" th:field="*{id}">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Họ và tên</label>
+                        <input type="text" class="form-control" id="name1" aria-describedby="emailHelp"
+                               placeholder="VD: Nguyễn Văn An" required th:field="*{name}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Ngày sinh</label>
+                        <input type="date" class="form-control" id="dayOfBirth1" placeholder="1970-11-07"
+                               th:field="*{dateOfBirth}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Giới tính</label><br>
+                        <label for="gender12"><input class="ms-3 me-1" checked type="radio" th:field="*{gender}"
+                                                    id="gender12" th:value='true'>
+                            Nam
+                        </label>
+                        <label for="gender122"><input class="ms-3 me-1" type="radio" th:field="*{gender}" id="gender122"
+                                                    th:value='false'>
+                            Nữ
+                        </label>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail2" class="form-label">CCCD/CMND</label>
+                        <input type="text" class="form-control" id="idCard1" aria-describedby="emailHelp"
+                               placeholder="VD: 13549681324" th:field="*{idCard}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail4" class="form-label">Số điện thoại</label>
+                        <input type="text" class="form-control" id="phoneNumber1" aria-describedby="emailHelp"
+                               placeholder="VD: 4562317861" th:field="*{phoneNumber}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail5" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="email1" aria-describedby="emailHelp"
+                               placeholder="VD: annguyen@gamil.com" th:field="*{email}" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail6" class="form-label">Địa chỉ</label>
+                        <input type="text" class="form-control" id="address1" aria-describedby="emailHelp"
+                               placeholder="VD: 22 Yên Bái, Đà Nẵng" th:field="*{address}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail6" class="form-label">Loại khách</label>
+                        <select th:field="*{customerType}" class="form-select" aria-label="Default select example">
+                            <option th:each="customerType: ${customerTypes}" th:text="${customerType.getName()}"
+                                    th:value="${customerType.getId()}"></option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal delete-->
+<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel3">Xóa khách hàng</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/customers/delete}" method="post">
+                    <input hidden id="idDelete" name="idDelete">
+                    <span>
+                        Bạn có chắc chắn muốn xóa <span style="color: red" id="nameDelete"></span>
+                    </span>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="submit" class="btn btn-primary">Xóa</button>
                     </div>
                 </form>
             </div>
@@ -120,4 +259,20 @@
     </div>
 </div>
 </body>
+<script>
+    function getInfoCustomerEdit(id, name, dayOfBirth,gender, idCard, phoneNumber, email, address, customerType) {
+        document.getElementById("id1").value = id;
+        document.getElementById("name1").value = name;
+        document.getElementById("dayOfBirth1").value = dayOfBirth;
+        document.getElementById("idCard1").value = idCard;
+        document.getElementById("phoneNumber1").value = phoneNumber;
+        document.getElementById("email1").value = email;
+        document.getElementById("address1").value = address;
+    }
+
+    function getInfoCustomerDelete(id,name) {
+        document.getElementById("idDelete").value = id;
+        document.getElementById("nameDelete").innerText = name;
+    }
+</script>
 </html>

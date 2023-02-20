@@ -3,7 +3,6 @@ package com.example.service.customer;
 import com.example.model.customer.Customer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.repository.query.Param;
 
 import java.util.Optional;
 
@@ -17,6 +16,7 @@ public interface ICustomerService {
     boolean update(Customer customer);
 
     Optional<Customer> findById(Long id);
+    Optional<Customer> findByIdCard(String idCard);
 
     boolean removeById(Long id);
 }
