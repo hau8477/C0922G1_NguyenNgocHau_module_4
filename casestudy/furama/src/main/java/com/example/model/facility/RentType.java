@@ -14,7 +14,7 @@ public class RentType {
     private String name;
     @OneToMany(mappedBy = "rentType")
     private Set<Facility> facilitySet;
-    private boolean flag;
+    private boolean flag = true;
 
     public Long getId() {
         return id;

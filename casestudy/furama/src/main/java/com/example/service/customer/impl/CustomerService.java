@@ -16,7 +16,8 @@ public class CustomerService implements ICustomerService {
     private ICustomerRepository customerRepository;
 
     @Override
-    public Page<Customer> findAllByNameContainingAndEmailContainingAndCustomerType_Id(String name, String email, Long customerTypeId, Pageable pageable) {
+    public Page<Customer> findAllByNameContainingAndEmailContainingAndCustomerType_Id(
+            String name, String email, Long customerTypeId, Pageable pageable) {
         return this.customerRepository.findAllByNameContainingAndEmailContainingAndCustomerType_Id(
                  name,email,customerTypeId,pageable);
     }
@@ -29,10 +30,9 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public boolean save(Customer customer) {
-        Optional<Customer> optionalCustomer = this.customerRepository.findByIdCard(customer.getIdCard());
-        Optional<Customer> optionalCustomer1 = this.customerRepository.findByPhoneNumber(customer.getPhoneNumber());
-        Optional<Customer> optionalCustomer2 = this.customerRepository.findByEmail(customer.getEmail());
-        if(optionalCustomer.isPresent() || optionalCustomer1.isPresent() || optionalCustomer2.isPresent()){
+        Optional<Customer> optionalCustomer = this.customerRepository.findCustomerByIdCardOrEmailOrPhoneNumber(
+                customer.getIdCard(), customer.getEmail(), customer.getPhoneNumber());
+        if(optionalCustomer.isPresent()){
             return false;
         }
         this.customerRepository.save(customer);

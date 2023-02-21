@@ -1,20 +1,22 @@
 package com.example.model.contract;
 
 import javax.persistence.*;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 public class ContractDetail {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "contract_id", referencedColumnName = "id")
     private Contract contract;
     @ManyToOne
     @JoinColumn(name = "attach_facility_id", referencedColumnName = "id")
     private AttachFacility attachFacility;
     private int quantity;
-    private boolean flag;
+    private boolean flag = true;
 
     public boolean isFlag() {
         return flag;

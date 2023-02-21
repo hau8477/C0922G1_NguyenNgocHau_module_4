@@ -1,34 +1,25 @@
-package com.example.model.contract;
+package com.example.dto;
 
+import com.example.model.contract.ContractDetail;
 import com.example.model.customer.Customer;
 import com.example.model.employee.Employee;
 import com.example.model.facility.Facility;
 
-import javax.persistence.*;
 import java.util.List;
 
-@Entity
-public class Contract {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class ContractDTO {
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "customer_id" ,referencedColumnName = "id", nullable = false)
     private Customer customer;
-    @ManyToOne
-    @JoinColumn(name = "employee_id", referencedColumnName = "id", nullable = false)
     private Employee employee;
-    @ManyToOne
-    @JoinColumn(name = "facility_id", referencedColumnName = "id", nullable = false)
     private Facility facility;
     private String startDate;
     private String endDate;
     private double deposit;
-    @OneToMany(mappedBy = "contract")
     private List<ContractDetail> contractDetail;
     private boolean flag = true;
+    private double totalCost;
 
-    public Contract() {
+    public ContractDTO() {
     }
 
     public Long getId() {
@@ -101,5 +92,13 @@ public class Contract {
 
     public void setFlag(boolean flag) {
         this.flag = flag;
+    }
+
+    public double getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(double totalCost) {
+        this.totalCost = totalCost;
     }
 }

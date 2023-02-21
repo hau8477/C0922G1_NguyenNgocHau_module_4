@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+</head>
+<body>
+<nav th:replace="/layout :: nav"></nav>
+<nav th:fragment="nav" class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Danh sách hợp đồng</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+    </div>
+</nav>
+<p th:text="${mess}" style="color: red"></p>
+<table id="tableService" class="table table-striped">
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>Dịch vụ</th>
+        <th>Khách hàng</th>
+        <th>Ngày bắt đầu</th>
+        <th>Ngày kết thúc</th>
+        <th>Tiền đặt cọc</th>
+        <th>Tổng tiền</th>
+        <th>Các dịch vụ đi kèm</th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="contract, iState : ${contractDTOS}">
+        <td th:text="${iState.count}"></td>
+        <td th:text="${contract.getFacility().getName()}"></td>
+        <td th:text="${contract.getCustomer().getName()}"></td>
+        <td th:text="${contract.getStartDate()}"></td>
+        <td th:text="${contract.getEndDate()}"></td>
+        <td th:text="${contract.getDeposit()}"></td>
+        <td th:text="${contract.getTotalCost()}">
+        <td>
+            <!-- Button trigger modal -->
+            <button type="button" id="btnDetails" class="btn btn-primary" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal" th:attr="onclick=|getAttachFacility('${contract.getId()}')|">
+                Danh sách các dịch vụ đi kèm
+            </button>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
+                    th:attr="onclick=|getIdContract('${contract.getId()}')|">
+                +
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<!-- Modal show list attach facility-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Dịch vụ đi kèm</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Dịch vụ đi kèm</th>
+                        <th>Mã hợp đồng</th>
+                        <th>Số lượng</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tbody">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal add new attach facility -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Thêm mới dịch vụ đi kèm</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/save-contract-detail}" th:object="${contractDetail}" method="post">
+                    <input id="contractId1" hidden th:field="*{contract}">
+                    <div class="mb-3">
+                        <select class="form-select" aria-label="Default select example" th:field="*{attachFacility}">
+                            <option th:each="attachFacility1: ${attachFacilities}"
+                                    th:text="${attachFacility1.getName()}"
+                                    th:value="${attachFacility1.getId()}"></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail5" class="form-label">Số lượng</label>
+                        <input th:field="*{quantity}" type="number" class="form-control" id="exampleInputEmail5"
+                               aria-describedby="emailHelp"
+                               required>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="submit" class="btn btn-primary">Thêm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="/jquery-3.6.3.min.js"></script>
+</body>
+<script>
+    // Xóa nội dung của tbody khi modal bị ẩn
+    $("#exampleModal").on("hidden.bs.modal", function () {
+        $("#tbody").empty();
+    });
+
+    function getAttachFacility(contractId) {
+        let link = `http://localhost:8080/contracts/attach-facilities/${contractId}`;
+        $.ajax({
+            type: "GET",
+            url: link,
+            success: function (data) {
+                console.log(data)
+                let tbody = "";
+                if (data.length == 0) {
+                    tbody = `
+          <tr>
+            <td colspan="4">Danh sách đang trống</td>
+          </tr>
+        `;
+                    $("#tbody").html(tbody);
+                } else {
+                    for (let i = 0; i < data.length; i++) {
+                        tbody +=
+                            `
+            <tr>
+              <td>${i + 1}</td>
+              <td>${data[i].attachFacilityName}</td>
+              <td>${data[i].contractId}</td>
+              <td>${data[i].quantity}</td>
+            </tr>
+            `;
+                    }
+                }
+                $("#tbody").html(tbody);
+            },
+            fail: function (error) {
+                console.log(error)
+            }
+        });
+    }
+
+    function getIdContract(id) {
+        document.getElementById("contractId1").value = id;
+    }
+
+</script>
+</html>

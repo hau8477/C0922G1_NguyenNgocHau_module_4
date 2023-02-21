@@ -21,7 +21,7 @@ public class AttachFacility {
     private String status;
     @OneToMany(mappedBy = "attachFacility")
     private Set<ContractDetail> contractDetails;
-    private boolean flag;
+    private boolean flag = true;
 
     public boolean isFlag() {
         return flag;

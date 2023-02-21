@@ -14,7 +14,7 @@ public class FacilityType {
     private String name;
     @OneToMany(mappedBy = "facilityType")
     private Set<Facility> facilitySet;
-    private boolean flag;
+    private boolean flag = true;
 
     public FacilityType() {
     }

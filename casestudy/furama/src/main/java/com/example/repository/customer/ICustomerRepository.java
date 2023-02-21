@@ -24,4 +24,9 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     Optional<Customer> findByIdCard(String idCard);
     Optional<Customer> findByEmail(String email);
     Optional<Customer> findByPhoneNumber(String phoneNumber);
+    @Query(value = "select * from customer where id_card = :idCard or email = :email or phone_number = :phoneNumber " +
+            "and flag = true",
+    nativeQuery = true)
+    Optional<Customer> findCustomerByIdCardOrEmailOrPhoneNumber(
+            @Param("idCard") String idCard,@Param("email") String email,@Param("phoneNumber") String phoneNumber);
 }
