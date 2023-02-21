@@ -24,11 +24,13 @@
                 </li>
             </ul>
             <form th:action="@{/customers}" method="get" class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Tên khách hàng" aria-label="Search" name="nameSearch">
-                <input class="form-control me-2" type="search" placeholder="Email khách hàng" aria-label="Search" name="emailSearch">
+                <input class="form-control me-2" type="search" placeholder="Tên khách hàng" aria-label="Search"
+                       name="nameSearch" th:value="${nameSearch}">
+                <input class="form-control me-2" type="search" placeholder="Email khách hàng" aria-label="Search"
+                       name="emailSearch" th:value="${emailSearch}">
                 <select name="customerTypeId" class="form-select" aria-label="Default select example">
                     <option th:each="customerType : ${customerTypes}" th:value="${customerType.getId()}"
-                            th:text="${customerType.getName()}">
+                            th:text="${customerType.getName()}" th:selected="${customerTypeId == customerType.getId()}">
                     </option>
                 </select>
                 <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>

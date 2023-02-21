@@ -1,6 +1,7 @@
 package com.example.controller.customer;
 
 import com.example.model.customer.Customer;
+import com.example.model.customer.CustomerType;
 import com.example.service.customer.ICustomerService;
 import com.example.service.customer.ICustomerTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/customers")
@@ -27,17 +30,21 @@ public class CustomerController {
             @RequestParam(required = false, defaultValue = "0") Long customerTypeId,
             @PageableDefault(page = 0, size = 5)Pageable pageable,
             Model model){
+        Optional<CustomerType> customerType = this.customerTypeService.findById(customerTypeId);
         Page<Customer> customers;
-        if (customerTypeId == 0) {
-            customers = this.customerService.findAllByNameContainingAndEmailContaining(
-                    nameSearch, emailSearch, pageable);
-        } else {
+        if (customerType.isPresent()) {
             customers = this.customerService.findAllByNameContainingAndEmailContainingAndCustomerType_Id(
                     nameSearch, emailSearch, customerTypeId, pageable);
+        } else {
+            customers = this.customerService.findAllByNameContainingAndEmailContaining(
+                    nameSearch, emailSearch, pageable);
         }
         model.addAttribute("customers", customers);
         model.addAttribute("customerTypes", this.customerTypeService.findAll());
         model.addAttribute("customer", new Customer());
+        model.addAttribute("nameSearch", nameSearch);
+        model.addAttribute("emailSearch", emailSearch);
+        model.addAttribute("customerTypeId", customerTypeId);
         return "/customer/list";
     }
 

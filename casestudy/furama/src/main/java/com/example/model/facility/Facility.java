@@ -15,21 +15,21 @@ public class Facility {
     @JoinColumn(name = "rent_type_id", referencedColumnName = "id", nullable = false)
     private RentType rentType;
     @Size(max = 45)
-    @Column(columnDefinition = "varchar(45)",nullable = false)
+    @Column(columnDefinition = "varchar(45)",nullable = false, unique = true)
     private String name;
-    private int area;
-    private double cost;
-    private int maxPeople;
+    private int area = 0;
+    private double cost = 0;
+    private int maxPeople = 0;
     @Size(max = 45)
     @Column(columnDefinition = "varchar(45)")
     private String standardRoom;
     @Size(max = 45)
     @Column(columnDefinition = "varchar(45)")
     private String descriptionOtherConvenience;
-    private double poolArea;
-    private int numberOfFloors;
+    private double poolArea = 0;
+    private int numberOfFloors = 0;
     private String facilityFree;
-    private boolean flag;
+    private boolean flag = true;
 
 
     public Facility() {

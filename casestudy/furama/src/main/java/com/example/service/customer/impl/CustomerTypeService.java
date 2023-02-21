@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+
 @Service
 public class CustomerTypeService implements ICustomerTypeService {
     @Autowired
@@ -14,5 +16,10 @@ public class CustomerTypeService implements ICustomerTypeService {
     @Override
     public List<CustomerType> findAll() {
         return this.customerTypeRepository.findAll();
+    }
+
+    @Override
+    public Optional<CustomerType> findById(Long id) {
+        return this.customerTypeRepository.findById(id);
     }
 }

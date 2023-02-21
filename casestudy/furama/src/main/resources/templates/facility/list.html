@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="/layout :: head">
+
+</head>
+<body>
+<nav th:replace="/layout :: nav"></nav>
+<nav th:fragment="nav" class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">Danh sách dịch vụ</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                </li>
+                <li class="nav-item">
+                </li>
+                <li class="nav-item">
+                </li>
+                <li class="nav-item">
+                </li>
+            </ul>
+            <form th:action="@{/facilities}" method="get" class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Tên dịch vụ" aria-label="Search"
+                       name="nameSearch" th:value="${nameSearch}">
+                <select name="facilityTypeId" class="form-select" aria-label="Default select example">
+                    <option th:each="facilityType : ${facilityTypes}" th:value="${facilityType.getId()}"
+                            th:text="${facilityType.getName()}" th:selected="${facilityTypeId == facilityType.getId()}">
+                    </option>
+                </select>
+                <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
+            </form>
+        </div>
+    </div>
+</nav>
+
+<p th:text="${mess}" style="color: red"></p>
+<table id="tableService" class="table table-striped">
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>Tên dịch vụ</th>
+        <th>Diện tích sử dụng</th>
+        <th>Giá</th>
+        <th>Số lượng người tối đa</th>
+        <th>Kiểu thuê</th>
+        <th>Loại dịch vụ</th>
+        <th>Tiêu chuẩn phòng</th>
+        <th>Mô tả tiện ích khác</th>
+        <th>Diện tích hồ bơi</th>
+        <th>Số tầng</th>
+        <th>Dịch vụ miễn phí</th>
+        <th></th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="facility, iState : ${facilities}">
+        <td th:text="${iState.count}"></td>
+        <td th:text="${facility.getName()}"></td>
+        <td th:text="${facility.getArea()}"></td>
+        <td th:text="${facility.getCost()}"></td>
+        <td th:text="${facility.getMaxPeople()}"></td>
+        <td th:text="${facility.getRentType().getName()}"></td>
+        <td th:text="${facility.getFacilityType().getName()}"></td>
+        <td th:text="${facility.getStandardRoom()}"></td>
+        <td th:text="${facility.getDescriptionOtherConvenience()}"></td>
+        <td th:text="${facility.getPoolArea()}"></td>
+        <td th:text="${facility.getNumberOfFloors()}"></td>
+        <td th:text="${facility.getFacilityFree()}"></td>
+        <td>
+            <button th:attr="onclick=|getInfoFacility('${facility.getId()}','${facility.getName()}',
+                                                '${facility.getArea()}','${facility.getCost()}','${facility.getMaxPeople()}',
+                                                '${facility.getRentType()}','${facility.getFacilityType()}',
+                                                '${facility.getStandardRoom()}','${facility.getDescriptionOtherConvenience()}',
+                                                '${facility.getPoolArea()}','${facility.getNumberOfFloors()}',
+                                                '${facility.getFacilityFree()}')|" type="button" class="btn btn-warning"
+                    data-bs-toggle="modal"
+                    data-bs-target="#exampleModal1">
+                Sửa
+            </button>
+        </td>
+        <td>
+            <button th:attr="onclick=|getInfoDelete('${facility.getId()}','${facility.getName()}')|"
+                    type="button" class="btn btn-danger" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal3">
+                Delete
+            </button>
+        </td>
+    </tr>
+    <tr>
+        <th></th>
+        <th>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                Thêm mới dịch vụ
+            </button>
+        </th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
+    </tbody>
+</table>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" th:if="${facilities.hasPrevious()}"
+               th:href="@{/facilities(page=${facilities.number -1},nameSearch=${nameSearch},
+               facilityTypeId=${facilityTypeId})}">Previous</a>
+        </li>
+        <li class="page-item"><a class="page-link" th:href="@{/facilities(page=0,nameSearch=${nameSearch},
+               facilityTypeId=${facilityTypeId})}">1</a></li>
+        <li class="page-item"><a class="page-link" th:href="@{/facilities(page=1,nameSearch=${nameSearch},
+               facilityTypeId=${facilityTypeId})}">2</a></li>
+        <li class="page-item">
+            <a class="page-link" th:if="${facilities.hasNext()}"
+               th:href="@{/facilities(page=${facilities.number +1},nameSearch=${nameSearch},
+               facilityTypeId=${facilityTypeId})}">Next</a>
+        </li>
+    </ul>
+</nav>
+<footer th:replace="/layout :: footer"></footer>
+<!--Modal create-->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel1">Thêm mới dịch vụ</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/facilities/create}" th:object="${facilityNew}" method="post">
+                    <div class="mb-3">
+                        <label for="facilityTypeId" class="form-label">Loại dịch vụ</label>
+                        <div class="mb-3">
+                            <label for="facilityTypeId" class="form-label"></label>
+                            <select onchange="hiddenInput()" class="form-select" aria-label="Default select example"
+                                    th:field="*{facilityType}"
+                                    id="facilityTypeId">
+                                <option th:each="facilityType: ${facilityTypes}"
+                                        th:value="${facilityType.getId()}" th:text="${facilityType.getName()}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nameService" class="form-label">Tên dịch vụ</label>
+                        <input type="text" class="form-control" id="nameService" aria-describedby="emailHelp"
+                               th:field="*{name}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="area" class="form-label">Diện tích</label>
+                        <input type="number" class="form-control" id="area"
+                               th:field="*{area}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cost" class="form-label">Giá</label>
+                        <input type="number" class="form-control" id="cost" aria-describedby="emailHelp"
+                               th:field="*{cost}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="maxPeople" class="form-label">Số lượng người tối đa</label>
+                        <input type="number" class="form-control" id="maxPeople" aria-describedby="emailHelp"
+                               th:field="*{maxPeople}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="rentType" class="form-label">Kiểu thuê</label>
+                        <div class="mb-3">
+                            <label for="rentType" class="form-label"></label>
+                            <select th:field="*{rentType}" class="form-select" aria-label="Default select example"
+                                    name="rentType" id="rentType">
+                                <option th:each="rentType: ${rentTypes}" th:value="${rentType.getId()}"
+                                        th:text="${rentType.getName()}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="standardRoom" class="form-label">Tiêu chuẩn phòng</label>
+                        <input type="text" class="form-control" id="standardRoom" aria-describedby="emailHelp"
+                               th:field="*{standardRoom}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="descriptionOtherConvenience" class="form-label">Mô tả tiện ích khách</label>
+                        <input type="text" class="form-control" id="descriptionOtherConvenience"
+                               aria-describedby="emailHelp"
+                               th:field="*{descriptionOtherConvenience}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="poolArea" class="form-label">Diện tích hồ bơi</label>
+                        <input type="number" class="form-control" id="poolArea" aria-describedby="emailHelp"
+                               th:field="*{poolArea}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="numberOfFloors" class="form-label">Số tầng</label>
+                        <input type="number" class="form-control" id="numberOfFloors" aria-describedby="emailHelp"
+                               th:field="*{numberOfFloors}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="facilityFree" class="form-label">Dịch vụ miễn phí</label>
+                        <input type="text" class="form-control" id="facilityFree" aria-describedby="emailHelp"
+                               th:field="*{facilityFree}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal edit-->
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel2">Chỉnh sửa dịch vụ</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/facilities/update}" th:object="${facilityNew}" method="post">
+                    <input type="number" id="idServiceEdit" hidden th:field="*{id}">
+                    <div class="mb-3">
+                        <label for="facilityTypeId" class="form-label">Loại dịch vụ</label>
+                        <div class="mb-3">
+                            <label for="facilityTypeId" class="form-label"></label>
+                            <select onchange="hiddenInput()" class="form-select" aria-label="Default select example"
+                                    th:field="*{facilityType}"
+                                    id="facilityTypeIdEdit">
+                                <option th:each="facilityType: ${facilityTypes}" th:value="${facilityType.getId()}"
+                                        th:text="${facilityType.getName()}">
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="nameService" class="form-label">Tên dịch vụ</label>
+                        <input type="text" class="form-control" id="nameServiceEdit" aria-describedby="emailHelp"
+                               th:field="*{name}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="area" class="form-label">Diện tích</label>
+                        <input type="number" class="form-control" id="areaEdit"
+                               th:field="*{area}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="cost" class="form-label">Giá</label>
+                        <input type="number" class="form-control" id="costEdit" aria-describedby="emailHelp"
+                               th:field="*{cost}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="maxPeople" class="form-label">Số lượng người tối đa</label>
+                        <input type="number" class="form-control" id="maxPeopleEdit" aria-describedby="emailHelp"
+                               th:field="*{maxPeople}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="rentType" class="form-label">Kiểu thuê</label>
+                        <div class="mb-3">
+                            <label for="rentType" class="form-label"></label>
+                            <select class="form-select" aria-label="Default select example"
+                                    th:field="*{rentType}" id="rentTypeEdit">
+                                <option th:each="rentType: ${rentTypes}" th:value="${rentType.getId()}"
+                                        th:text="${rentType.getName()}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="standardRoom" class="form-label">Tiêu chuẩn phòng</label>
+                        <input type="text" class="form-control" id="standardRoomEdit" aria-describedby="emailHelp"
+                               th:field="*{standardRoom}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="descriptionOtherConvenience" class="form-label">Mô tả tiện ích khác</label>
+                        <input type="text" class="form-control" id="descriptionOtherConvenienceEdit"
+                               aria-describedby="emailHelp"
+                               th:field="*{descriptionOtherConvenience}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="poolArea" class="form-label">Diện tích hồ bơi</label>
+                        <input type="number" class="form-control" id="poolAreaEdit" aria-describedby="emailHelp"
+                               th:field="*{poolArea}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="numberOfFloors" class="form-label">Số tầng</label>
+                        <input type="number" class="form-control" id="numberOfFloorsEdit" aria-describedby="emailHelp"
+                               th:field="*{numberOfFloors}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="facilityFree" class="form-label">Dịch vụ miễn phí</label>
+                        <input type="text" class="form-control" id="facilityFreeEdit" aria-describedby="emailHelp"
+                               th:field="*{facilityFree}">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal delete -->
+<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel3">Delete service</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{facilities/delete}" method="post">
+                    <input hidden type="number" id="idDelete" name="idDelete">
+                    <span>
+                        Bạn có chắc chắn muốn xóa <span style="color: red" id="nameDelete"></span>
+                    </span>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="submit" class="btn btn-primary">Xóa</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    function hiddenInput() {
+        let choice = +document.getElementById("facilityTypeId").value;
+
+        switch (choice) {
+            case 1:
+                document.getElementById("nameService").value = "Villa";
+                document.getElementById("facilityFree").disabled = false;
+                document.getElementById("standardRoom").disabled = false;
+                document.getElementById("poolArea").disabled = false;
+                document.getElementById("numberOfFloors").disabled = false;
+                break;
+            case 2:
+                document.getElementById("nameService").value = "House";
+                document.getElementById("facilityFree").disabled = true;
+                document.getElementById("standardRoom").disabled = false;
+                document.getElementById("poolArea").disabled = false;
+                document.getElementById("numberOfFloors").disabled = false;
+                break;
+            case 3:
+                document.getElementById("nameService").value = "Room";
+                document.getElementById("standardRoom").disabled = true;
+                document.getElementById("poolArea").disabled = true;
+                document.getElementById("numberOfFloors").disabled = true;
+                document.getElementById("facilityFree").disabled = false;
+                break;
+            default:
+                document.getElementById("standardRoom").disabled = false;
+                document.getElementById("poolArea").disabled = false;
+                document.getElementById("numberOfFloors").disabled = false;
+                document.getElementById("facilityFree").disabled = false;
+        }
+    }
+
+    function getInfoFacility(id, name, area, cost, maxPeople, rentTypeId, facilityTypeId, standardRoom,
+                             descriptionOtherConvenience, poolArea, numberOfFloors, facilityFree) {
+        document.getElementById("idServiceEdit").value = id;
+        document.getElementById("nameServiceEdit").value = name;
+        document.getElementById("areaEdit").value = area;
+        document.getElementById("costEdit").value = cost;
+        document.getElementById("maxPeopleEdit").value = maxPeople;
+        document.getElementById("standardRoomEdit").value = standardRoom;
+        document.getElementById("descriptionOtherConvenienceEdit").value = descriptionOtherConvenience;
+        document.getElementById("poolAreaEdit").value = poolArea;
+        document.getElementById("numberOfFloorsEdit").value = numberOfFloors;
+        document.getElementById("facilityFreeEdit").value = facilityFree;
+    }
+
+    function getInfoDelete(id, name) {
+        document.getElementById("idDelete").value = id;
+        document.getElementById("nameDelete").innerText = name;
+    }
+</script>
+</html>
