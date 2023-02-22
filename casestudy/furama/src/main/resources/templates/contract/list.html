@@ -285,10 +285,10 @@
             success: function (data) {
                 console.log(data)
                 let tbody = "";
-                if (data.length == 0) {
+                if (data.length === 0) {
                     tbody = `
-          <tr>
-            <td colspan="4">Danh sách đang trống</td>
+          <tr colspan="4">
+            <td >Danh sách đang trống</td>
           </tr>
         `;
                     $("#tbody").html(tbody);

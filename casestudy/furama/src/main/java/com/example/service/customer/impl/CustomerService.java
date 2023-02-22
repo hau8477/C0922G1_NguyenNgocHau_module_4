@@ -20,13 +20,13 @@ public class CustomerService implements ICustomerService {
     public Page<Customer> findAllByNameContainingAndEmailContainingAndCustomerType_Id(
             String name, String email, Long customerTypeId, Pageable pageable) {
         return this.customerRepository.findAllByNameContainingAndEmailContainingAndCustomerType_Id(
-                 name,email,customerTypeId,pageable);
+                name, email, customerTypeId, pageable);
     }
 
     @Override
     public Page<Customer> findAllByNameContainingAndEmailContaining(String name, String email, Pageable pageable) {
         return this.customerRepository.findAllByNameContainingAndEmailContaining(
-                name,email,pageable);
+                name, email, pageable);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class CustomerService implements ICustomerService {
     public boolean save(Customer customer) {
         Optional<Customer> optionalCustomer = this.customerRepository.findCustomerByIdCardOrEmailOrPhoneNumber(
                 customer.getIdCard(), customer.getEmail(), customer.getPhoneNumber());
-        if(optionalCustomer.isPresent()){
+        if (optionalCustomer.isPresent()) {
             return false;
         }
         this.customerRepository.save(customer);
@@ -48,7 +48,9 @@ public class CustomerService implements ICustomerService {
     @Override
     public boolean update(Customer customer) {
         Optional<Customer> optionalCustomer = this.customerRepository.findById(customer.getId());
-        if(!optionalCustomer.isPresent()){
+        Optional<Customer> optionalCustomer1 = this.customerRepository.findCustomerByIdCardOrEmailOrPhoneNumber(
+                customer.getIdCard(), customer.getEmail(), customer.getPhoneNumber());
+        if (!optionalCustomer.isPresent() || optionalCustomer1.isPresent()) {
             return false;
         }
         this.customerRepository.save(customer);
@@ -68,7 +70,7 @@ public class CustomerService implements ICustomerService {
     @Override
     public boolean removeById(Long id) {
         Optional<Customer> optionalCustomer = this.customerRepository.findById(id);
-        if(!optionalCustomer.isPresent()){
+        if (!optionalCustomer.isPresent()) {
             return false;
         }
         this.customerRepository.deleteById(id);

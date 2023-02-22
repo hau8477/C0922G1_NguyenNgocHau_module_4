@@ -44,7 +44,8 @@ public class FacilityService implements IFacilityService {
     @Override
     public boolean update(Facility facility) {
         Optional<Facility> optionalFacility = this.facilityRepository.findById(facility.getId());
-        if(!optionalFacility.isPresent()){
+        Optional<Facility> optionalFacility1 = this.facilityRepository.findByName(facility.getName());
+        if(!optionalFacility.isPresent() || optionalFacility1.isPresent()){
             return false;
         }
         this.facilityRepository.save(facility);

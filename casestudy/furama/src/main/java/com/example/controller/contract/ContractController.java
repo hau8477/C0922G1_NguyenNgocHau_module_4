@@ -32,7 +32,7 @@ public class ContractController {
 
     @GetMapping("")
     public String findAll(Model model, @PageableDefault(page = 0, size = 5)Pageable pageable) {
-        model.addAttribute("attachFacilities", this.attachFacilityService.findAll());
+        model.addAttribute("attachFacilities", this.attachFacilityService.findAllAttachFacility());
         model.addAttribute("contractDTOS", this.contractService.findAll(pageable));
         model.addAttribute("contractDetail", new ContractDetail());
         model.addAttribute("contractNew", new Contract());
