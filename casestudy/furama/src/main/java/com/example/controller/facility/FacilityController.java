@@ -10,6 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -47,6 +48,7 @@ public class FacilityController {
     }
 
     @PostMapping("/create")
+    @Transactional
     public String save(@ModelAttribute Facility facility, RedirectAttributes redirectAttributes) {
         if (this.facilityService.save(facility)) {
             redirectAttributes.addFlashAttribute("mess", "Thêm mới dịch vụ thành công");
@@ -57,6 +59,7 @@ public class FacilityController {
     }
 
     @PostMapping("/update")
+    @Transactional
     public String update(@ModelAttribute Facility facility, RedirectAttributes redirectAttributes) {
         if (this.facilityService.update(facility)) {
             redirectAttributes.addFlashAttribute("mess", "Chỉnh sửa dịch vụ thành công");
@@ -67,6 +70,7 @@ public class FacilityController {
     }
 
     @PostMapping("/delete")
+    @Transactional
     public String remove(@RequestParam("idDelete") Long id, RedirectAttributes redirectAttributes) {
         if (this.facilityService.remove(id)) {
             redirectAttributes.addFlashAttribute("mess", "Xóa dịch vụ thành công");

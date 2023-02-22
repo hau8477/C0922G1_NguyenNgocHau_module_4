@@ -1,10 +1,10 @@
 package com.example.dto;
 
-public class ContractDetailRequest {
+public class ContractDetailRequestDTO {
     private Long id;
     private int quantity;
 
-    public ContractDetailRequest() {
+    public ContractDetailRequestDTO() {
     }
 
     public Long getId() {

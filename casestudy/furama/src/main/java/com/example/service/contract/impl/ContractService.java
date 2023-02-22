@@ -1,7 +1,7 @@
 package com.example.service.contract.impl;
 
 import com.example.dto.ContractDTO;
-import com.example.dto.ContractDetailRequest;
+import com.example.dto.ContractDetailRequestDTO;
 import com.example.model.contract.AttachFacility;
 import com.example.model.contract.Contract;
 import com.example.model.contract.ContractDetail;
@@ -59,7 +59,7 @@ public class ContractService implements IContractService {
     }
 
     @Override
-    public boolean saveContract(Contract contract, List<ContractDetailRequest> contractDetails) {
+    public boolean saveContract(Contract contract, List<ContractDetailRequestDTO> contractDetails) {
         Optional<Customer> optionalCustomer = this.customerRepository.findById(contract.getCustomer().getId());
         Optional<Employee> optionalEmployee = this.employeeRepository.findById(contract.getEmployee().getId());
 
@@ -69,12 +69,12 @@ public class ContractService implements IContractService {
 
         this.contractRepository.save(contract);
 
-        for (ContractDetailRequest contractDetailRequest : contractDetails) {
+        for (ContractDetailRequestDTO contractDetailRequestDTO : contractDetails) {
 
             Optional<AttachFacility> attachFacility =
-                    this.attachFacilityRepository.findById(contractDetailRequest.getId());
+                    this.attachFacilityRepository.findById(contractDetailRequestDTO.getId());
 
-            if (!attachFacility.isPresent() || contractDetailRequest.getQuantity() <= 0) {
+            if (!attachFacility.isPresent() || contractDetailRequestDTO.getQuantity() <= 0) {
                 System.out.println("Attach facility không tồn tại hoặc số lượng nhỏ hơn 0");
                 return false;
             }
@@ -82,7 +82,7 @@ public class ContractService implements IContractService {
             ContractDetail contractDetailNew = new ContractDetail();
             contractDetailNew.setContract(contract);
             contractDetailNew.setAttachFacility(attachFacility.get());
-            contractDetailNew.setQuantity(contractDetailRequest.getQuantity());
+            contractDetailNew.setQuantity(contractDetailRequestDTO.getQuantity());
 
             this.contractDetailRepository.save(contractDetailNew);
         }

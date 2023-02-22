@@ -1,6 +1,6 @@
 package com.example.controller.contract;
 
-import com.example.dto.ContractDetailRequest;
+import com.example.dto.ContractDetailRequestDTO;
 import com.example.model.contract.Contract;
 import com.example.model.contract.ContractDetail;
 import com.example.service.contract.IAttachFacilityService;
@@ -62,13 +62,13 @@ public class ContractController {
         // Lấy danh sách ContractDetail từ requestData
         List<Map<String, Object>> contractDetailsData = (List<Map<String, Object>>) requestData.get("contractDetails");
 
-        List<ContractDetailRequest> contractDetailRequests = new ArrayList<>();
+        List<ContractDetailRequestDTO> contractDetailRequestDTOS = new ArrayList<>();
         for (Map<String, Object> detailData : contractDetailsData) {
-            ContractDetailRequest detail = mapper.convertValue(detailData, ContractDetailRequest.class);
-            contractDetailRequests.add(detail);
+            ContractDetailRequestDTO detail = mapper.convertValue(detailData, ContractDetailRequestDTO.class);
+            contractDetailRequestDTOS.add(detail);
         }
         // Lưu Contract và ContractDetail
-        if (contractService.saveContract(contract, contractDetailRequests)) {
+        if (contractService.saveContract(contract, contractDetailRequestDTOS)) {
             response.put("mess", "Tạo hợp đồng thành công");
         } else {
             response.put("mess", "Tạo hợp đồng thất bại");
