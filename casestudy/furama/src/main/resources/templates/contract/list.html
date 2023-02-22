@@ -49,8 +49,38 @@
             </button>
         </td>
     </tr>
+    <tr>
+        <th></th>
+        <th>
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+                +
+            </button>
+        </th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+        <th></th>
+    </tr>
     </tbody>
 </table>
+<!--Paging-->
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" th:if="${contractDTOS.hasPrevious()}"
+               th:href="@{/contracts(page=${contractDTOS.number -1})}">Previous</a>
+        </li>
+        <li class="page-item"><a class="page-link" th:href="@{/contracts(page=0)}">1</a></li>
+        <li class="page-item"><a class="page-link" th:href="@{/contracts(page=1)}">2</a></li>
+        <li class="page-item">
+            <a class="page-link" th:if="${contractDTOS.hasNext()}"
+               th:href="@{/contracts(page=${contractDTOS.number +1})}">Next</a>
+        </li>
+    </ul>
+</nav>
 <!-- Modal show list attach facility-->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -107,6 +137,61 @@
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
                         <button type="submit" class="btn btn-primary">Thêm</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!--Modal create-->
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel1">Tạo hợp đồng</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/contracts/create}" method="post" th:object="${contractNew}">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Ngày bắt đầu</label>
+                        <input type="datetime-local" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                               placeholder="VD: Nguyễn Văn An" required th:field="*{startDate}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputPassword1" class="form-label">Ngày kết thúc</label>
+                        <input type="datetime-local" class="form-control" id="exampleInputPassword1" placeholder="1970-11-07"
+                               th:field="*{endDate}">
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail2" class="form-label">Tiền đặt cọc</label>
+                        <input type="text" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp"
+                               placeholder="VD: 13549681324" th:field="*{deposit}">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Khách hàng</label>
+                        <select th:field="*{customer}" class="form-select" aria-label="Default select example">
+                            <option th:each="customer: ${customers}" th:text="${customer.getName()}"
+                                    th:value="${customer.getId()}"></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Nhân viên</label>
+                        <select th:field="*{employee}" class="form-select" aria-label="Default select example">
+                            <option th:each="employee: ${employees}" th:text="${employee.getName()}"
+                                    th:value="${employee.getId()}"></option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dịch vụ</label>
+                        <select th:field="*{facility}" class="form-select" aria-label="Default select example">
+                            <option th:each="facility: ${facilities}" th:text="${facility.getName()}"
+                                    th:value="${facility.getId()}"></option>
+                        </select>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="submit" class="btn btn-primary">Lưu</button>
                     </div>
                 </form>
             </div>

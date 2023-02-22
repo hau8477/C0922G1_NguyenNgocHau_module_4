@@ -1,6 +1,8 @@
 package com.example.repository.contract;
 
 import com.example.model.contract.Contract;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -15,5 +17,5 @@ public interface IContractRepository extends JpaRepository<Contract, Long> {
             "WHERE contract.id = :contractId and contract.flag = true\n" +
             "GROUP BY contract.id;", nativeQuery = true)
     double solveTotal(@Param("contractId") Long id);
-
+    Page<Contract> findAll(Pageable pageable);
 }
