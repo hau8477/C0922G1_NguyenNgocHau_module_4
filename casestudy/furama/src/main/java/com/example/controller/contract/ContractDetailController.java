@@ -14,8 +14,8 @@ public class ContractDetailController {
     private IContractDetailService contractDetailService;
 
     @PostMapping("/save-contract-detail")
-    public String save(@ModelAttribute ContractDetail contractDetail, RedirectAttributes redirectAttributes){
-        if(this.contractDetailService.save(contractDetail)){
+    public String save(@ModelAttribute ContractDetail contractDetail, RedirectAttributes redirectAttributes) {
+        if (this.contractDetailService.save(contractDetail)) {
             redirectAttributes.addFlashAttribute("mess", "Thêm mới dịch vụ đi kèm thành công");
         } else {
             redirectAttributes.addFlashAttribute("mess", "Thêm mới dịch vụ đi kèm thất bại");

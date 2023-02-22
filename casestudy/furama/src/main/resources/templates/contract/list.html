@@ -53,7 +53,7 @@
         <th></th>
         <th>
             <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createContractModal"
-            onclick="clearListAT()">
+                    onclick="clearListAT()">
                 +
             </button>
         </th>
@@ -155,39 +155,42 @@
             <div class="modal-body">
                 <form th:action="@{/contracts/create}" method="post" th:object="${contractNew}">
                     <div class="mb-3">
-                        <label for="exampleInputEmail1" class="form-label">Ngày bắt đầu</label>
-                        <input type="datetime-local" class="form-control" id="exampleInputEmail1"
+                        <label for="startDate" class="form-label">Ngày bắt đầu</label>
+                        <input type="datetime-local" class="form-control" id="startDate"
                                aria-describedby="emailHelp"
                                placeholder="VD: Nguyễn Văn An" required th:field="*{startDate}">
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Ngày kết thúc</label>
-                        <input type="datetime-local" class="form-control" id="exampleInputPassword1"
+                        <label for="endDate" class="form-label">Ngày kết thúc</label>
+                        <input type="datetime-local" class="form-control" id="endDate"
                                placeholder="1970-11-07"
                                th:field="*{endDate}">
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputEmail2" class="form-label">Tiền đặt cọc</label>
-                        <input type="text" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp"
+                        <label for="deposit" class="form-label">Tiền đặt cọc</label>
+                        <input type="text" class="form-control" id="deposit" aria-describedby="emailHelp"
                                placeholder="VD: 13549681324" th:field="*{deposit}">
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Khách hàng</label>
-                        <select th:field="*{customer}" class="form-select" aria-label="Default select example">
+                        <select th:field="*{customer}" class="form-select" aria-label="Default select example"
+                                id="customer">
                             <option th:each="customer: ${customers}" th:text="${customer.getName()}"
                                     th:value="${customer.getId()}"></option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Nhân viên</label>
-                        <select th:field="*{employee}" class="form-select" aria-label="Default select example">
+                        <select th:field="*{employee}" class="form-select" aria-label="Default select example"
+                                id="employee">
                             <option th:each="employee: ${employees}" th:text="${employee.getName()}"
                                     th:value="${employee.getId()}"></option>
                         </select>
                     </div>
                     <div class="mb-3">
                         <label class="form-label">Dịch vụ</label>
-                        <select th:field="*{facility}" class="form-select" aria-label="Default select example">
+                        <select th:field="*{facility}" class="form-select" aria-label="Default select example"
+                                id="facility">
                             <option th:each="facility: ${facilities}" th:text="${facility.getName()}"
                                     th:value="${facility.getId()}"></option>
                         </select>
@@ -241,7 +244,7 @@
                     <select class="form-select" aria-label="Default select example" id="nameAT">
                         <option th:each="attachFacility: ${attachFacilities}"
                                 th:text="${attachFacility.getName()}"
-                                th:value="${attachFacility.getName()}"></option>
+                                th:value="${attachFacility.getId()}"></option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -319,11 +322,20 @@
     }
 
     class AttachFacility {
-        constructor(name, quantity) {
+        constructor(id, name, quantity) {
+            this._id = id;
             this._name = name;
             this._quantity = quantity;
         }
 
+
+        get id() {
+            return this._id;
+        }
+
+        set id(value) {
+            this._id = value;
+        }
 
         get name() {
             return this._name;
@@ -345,10 +357,12 @@
     let listAttachFacility = [];
 
     function addNewAttachFacility() {
-        let name = $("#nameAT").val();
+        var selectedId = $("#nameAT").val();
+        var selectedName = $("#nameAT option:selected").text();
         let quantity = $("#quantityAT").val();
 
-        let attachFacility = new AttachFacility(name, quantity);
+        let attachFacility = new AttachFacility(selectedId, selectedName, quantity);
+        console.log(attachFacility);
         listAttachFacility.push(attachFacility);
         $("#staticBackdrop1").modal('hide');
         $("#createContractModal").modal('show');
@@ -358,9 +372,9 @@
     function display() {
         let table = "";
         for (let i = 0; i < listAttachFacility.length; i++) {
-            table += `
-
-<tr>
+            table +=
+                `
+                <tr>
     <td>${i + 1}</td>
     <td>${listAttachFacility[i].name}</td>
     <td>${listAttachFacility[i].quantity}</td>
@@ -368,7 +382,7 @@
     <button type="button" onclick="(() => deleteAT(${i}))()" class="btn btn-danger">Xóa</button>
 </td>
 </tr>
-            `
+                `
         }
         $('#content').html(table);
     }
@@ -377,6 +391,67 @@
         listAttachFacility.splice(id, 1);
         display();
     }
+
+    // Gửi dữ liệu về Controller gồm 1 đối tượng Contract và 1 danh sách dịch vụ đi kèm
+    $('#createContractModal form').submit(function (e) {
+        e.preventDefault(); // ngăn không cho form submit bình thường
+
+        // Lấy các giá trị trong form
+        let startDate = $("#startDate").val();
+        let endDate = $("#endDate").val();
+        let deposit = $("#deposit").val();
+        let customerId = $("#customer").val();
+        let employeeId = $("#employee").val();
+        let facilityId = $("#facility").val();
+
+        // Tạo một đối tượng Contract từ các giá trị trên
+        let contract = {
+            startDate: startDate,
+            endDate: endDate,
+            deposit: deposit,
+            customer: {
+                id: customerId
+            },
+            employee: {
+                id: employeeId
+            },
+            facility: {
+                id: facilityId
+            }
+        };
+
+        // Tạo một mảng các đối tượng ContractDetail từ listAttachFacility
+        console.log(listAttachFacility);
+        let contractDetails = listAttachFacility.map(function (item) {
+            return {
+                id: item.id,
+                quantity: item.quantity
+            };
+        });
+
+        // Tạo một object chứa cả Contract và danh sách ContractDetail
+        let data = {
+            contract: contract,
+            contractDetails: contractDetails
+        };
+
+        // Gửi request đến endpoint
+        $.ajax({
+            type: "POST",
+            contentType: "application/json",
+            url: "/contracts/create",
+            data: JSON.stringify(data),
+            dataType: 'json',
+            success: function (response) {
+                alert(response.mess);
+                location.reload();
+            },
+            error: function (xhr, status, error) {
+                console.log(error);
+            }
+        });
+        $('#createContractModal').modal('hide');
+    });
 </script>
 </body>
 

@@ -18,4 +18,5 @@ public interface IContractRepository extends JpaRepository<Contract, Long> {
             "GROUP BY contract.id;", nativeQuery = true)
     double solveTotal(@Param("contractId") Long id);
     Page<Contract> findAll(Pageable pageable);
+
 }
