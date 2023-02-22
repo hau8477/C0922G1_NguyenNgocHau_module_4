@@ -52,7 +52,8 @@
     <tr>
         <th></th>
         <th>
-            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal1">
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createContractModal"
+            onclick="clearListAT()">
                 +
             </button>
         </th>
@@ -143,8 +144,8 @@
         </div>
     </div>
 </div>
-<!--Modal create-->
-<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<!--Modal create contract-->
+<div class="modal fade" id="createContractModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -155,12 +156,14 @@
                 <form th:action="@{/contracts/create}" method="post" th:object="${contractNew}">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Ngày bắt đầu</label>
-                        <input type="datetime-local" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                        <input type="datetime-local" class="form-control" id="exampleInputEmail1"
+                               aria-describedby="emailHelp"
                                placeholder="VD: Nguyễn Văn An" required th:field="*{startDate}">
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputPassword1" class="form-label">Ngày kết thúc</label>
-                        <input type="datetime-local" class="form-control" id="exampleInputPassword1" placeholder="1970-11-07"
+                        <input type="datetime-local" class="form-control" id="exampleInputPassword1"
+                               placeholder="1970-11-07"
                                th:field="*{endDate}">
                     </div>
                     <div class="mb-3">
@@ -189,23 +192,91 @@
                                     th:value="${facility.getId()}"></option>
                         </select>
                     </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dịch vụ đi kèm</label>
+
+                        <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#staticBackdrop1">
+                            +
+                        </button>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Danh sách dịch vụ đi kèm</label>
+                        <div>
+                            <table class="table">
+                                <thead>
+                                <tr>
+                                    <th>STT</th>
+                                    <th>Dịch vụ đi kèm</th>
+                                    <th>Số lượng</th>
+                                    <th></th>
+                                </tr>
+                                </thead>
+                                <tbody id="content">
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
-                        <button type="submit" class="btn btn-primary">Lưu</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
+                        <button type="submit" class="btn btn-primary">Tạo hợp đồng</button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
 </div>
+<!-- Modal add attach facility in contract-->
+<div class="modal fade" id="staticBackdrop1" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+     aria-labelledby="staticBackdropLabel12" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel12">Dịch vụ đi kèm</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <select class="form-select" aria-label="Default select example" id="nameAT">
+                        <option th:each="attachFacility: ${attachFacilities}"
+                                th:text="${attachFacility.getName()}"
+                                th:value="${attachFacility.getName()}"></option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label for="exampleInputEmail5" class="form-label">Số lượng</label>
+                    <input type="number" class="form-control" id="quantityAT"
+                           aria-describedby="emailHelp"
+                           required>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                <button type="button" class="btn btn-primary" onclick="addNewAttachFacility()">Thêm</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer th:replace="/layout :: footer"></footer>
 <script src="/jquery-3.6.3.min.js"></script>
-</body>
 <script>
-    // Xóa nội dung của tbody khi modal bị ẩn
+    function clearListAT() {
+        listAttachFacility.splice(0, listAttachFacility.length);
+    }
+
+    // Xóa nội dung của tbody danh sách dịch vụ đi kèm khi modal bị ẩn
     $("#exampleModal").on("hidden.bs.modal", function () {
         $("#tbody").empty();
     });
 
+    // Xóa nội dung của content khi modal bị ẩn
+    $("#createContractModal").on("hidden.bs.modal", function () {
+        $("#content").empty();
+    });
+
+    // lấy danh sách dịch vụ đi kèm theo từng hợp đồng
     function getAttachFacility(contractId) {
         let link = `http://localhost:8080/contracts/attach-facilities/${contractId}`;
         $.ajax({
@@ -242,9 +313,71 @@
         });
     }
 
+    // Lấy id hợp đồng để thêm mới dịch vụ đi kèm
     function getIdContract(id) {
-        document.getElementById("contractId1").value = id;
+        $("#contractId1").val(id);
     }
 
+    class AttachFacility {
+        constructor(name, quantity) {
+            this._name = name;
+            this._quantity = quantity;
+        }
+
+
+        get name() {
+            return this._name;
+        }
+
+        set name(value) {
+            this._name = value;
+        }
+
+        get quantity() {
+            return this._quantity;
+        }
+
+        set quantity(value) {
+            this._quantity = value;
+        }
+    }
+
+    let listAttachFacility = [];
+
+    function addNewAttachFacility() {
+        let name = $("#nameAT").val();
+        let quantity = $("#quantityAT").val();
+
+        let attachFacility = new AttachFacility(name, quantity);
+        listAttachFacility.push(attachFacility);
+        $("#staticBackdrop1").modal('hide');
+        $("#createContractModal").modal('show');
+        display();
+    }
+
+    function display() {
+        let table = "";
+        for (let i = 0; i < listAttachFacility.length; i++) {
+            table += `
+
+<tr>
+    <td>${i + 1}</td>
+    <td>${listAttachFacility[i].name}</td>
+    <td>${listAttachFacility[i].quantity}</td>
+    <td>
+    <button type="button" onclick="(() => deleteAT(${i}))()" class="btn btn-danger">Xóa</button>
+</td>
+</tr>
+            `
+        }
+        $('#content').html(table);
+    }
+
+    function deleteAT(id) {
+        listAttachFacility.splice(id, 1);
+        display();
+    }
 </script>
+</body>
+
 </html>

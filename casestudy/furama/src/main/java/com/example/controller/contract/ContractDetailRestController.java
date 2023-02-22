@@ -12,12 +12,12 @@ import java.util.List;
 @RestController
 @CrossOrigin("*")
 @RequestMapping("/contracts")
-public class ContractRestController {
+public class ContractDetailRestController {
     @Autowired
     private IContractDetailService contractDetailService;
 
     @GetMapping("/attach-facilities/{id}")
-    public ResponseEntity<List<ContractDetailDTO>> solveTotal(@PathVariable Long id) {
+    public ResponseEntity<List<ContractDetailDTO>> findAllContractDetail(@PathVariable Long id) {
         List<ContractDetailDTO> attachFacilityDTOS = this.contractDetailService.getContractDetailsDTOByContractId(id);
         if (attachFacilityDTOS.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
