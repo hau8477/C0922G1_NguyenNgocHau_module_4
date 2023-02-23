@@ -1,16 +1,18 @@
 package com.example.dto.customerdto;
 
 import com.example.model.customer.CustomerType;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
 
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 
-public class CustomerDTO {
+public class CustomerDTO implements Validator {
     private Long id;
     private CustomerType customerType;
     @Size(max = 45)
     @NotNull
+    @NotBlank(message = "Vui lòng nhập tên khách hàng")
+    @Pattern(regexp = "^(?!.*\\d)[\\p{Lu}][\\p{Ll}]*([\\s][\\p{Lu}][\\p{Ll}]*)*$|^([\\p{Lu}][\\p{Ll}]*)$\n", message = "Tên khách hàng chưa đúng định dạng")
     private String name;
     private String dateOfBirth;
     private boolean gender;
@@ -18,6 +20,9 @@ public class CustomerDTO {
     @NotNull
     private String idCard;
     @Size(max = 45)
+    @NotBlank(message = "Vui lòng nhập số điện thoại")
+    @Pattern(regexp = "^(\\(84\\)\\+)?(09|01)\\d{8}$", message = "Số điện thoại chưa đúng định dạng, số điện thoại phải có dạng: " +
+            "090xxxxxxx hoặc 091xxxxxxx hoặc (84)+90xxxxxxx hoặc (84)+91xxxxxxx.")
     private String phoneNumber;
     @Size(max = 45)
     @Email
@@ -107,5 +112,15 @@ public class CustomerDTO {
 
     public void setFlag(boolean flag) {
         this.flag = flag;
+    }
+
+    @Override
+    public boolean supports(Class<?> clazz) {
+        return CustomerDTO.class.isAssignableFrom(clazz);
+    }
+
+    @Override
+    public void validate(Object target, Errors errors) {
+
     }
 }

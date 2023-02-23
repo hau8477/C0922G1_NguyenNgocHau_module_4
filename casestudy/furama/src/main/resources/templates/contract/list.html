@@ -173,12 +173,12 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/contracts/create}" method="post" th:object="${contractNew}">
+                <form th:action="@{/contracts/create}" method="post" th:object="${contractNew}" id="contractNew">
                     <div class="mb-3">
                         <label for="startDate" class="form-label">Ngày bắt đầu</label>
                         <input type="datetime-local" class="form-control" id="startDate"
                                aria-describedby="emailHelp"
-                               placeholder="VD: Nguyễn Văn An" required th:field="*{startDate}">
+                               required th:field="*{startDate}">
                     </div>
                     <div class="mb-3">
                         <label for="endDate" class="form-label">Ngày kết thúc</label>
@@ -252,7 +252,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
-                        <button type="submit" class="btn btn-primary">Tạo hợp đồng</button>
+                        <button type="button" class="btn btn-primary" onclick="checkContract()">Tạo hợp đồng</button>
                     </div>
                 </form>
             </div>
@@ -315,6 +315,7 @@
 <footer th:replace="/layout :: footer"></footer>
 <script src="/jquery-3.6.3.min.js"></script>
 <script>
+    //Clear listAttachFacility để tạo 1 hợp đồng mới
     function clearListAT() {
         listAttachFacility.splice(0, listAttachFacility.length);
         getTotalCost();
@@ -413,6 +414,7 @@
         }
     }
 
+    //List này chứa attach facility khi tạo hợp đồng
     let listAttachFacility = [];
 
     function addNewAttachFacility() {
@@ -432,6 +434,7 @@
         display();
     }
 
+    // Hiển thị tổng tiền tạm thời của hợp đồng đang tạo9
     function getTotalCost() {
         // Tính tổng tiền
         var totalCost = calculateTotal();
@@ -439,6 +442,7 @@
         $('#totalCost').val(totalCost);
     }
 
+    //Hiển thị list attach facility trong tạo mới hợp đồng
     function display() {
         let table = "";
         for (let i = 0; i < listAttachFacility.length; i++) {
@@ -458,6 +462,7 @@
         $('#content').html(table);
     }
 
+    //Dùng để xóa attach facility trong tạo mới hợp đồng
     function deleteAT(id) {
         listAttachFacility.splice(id, 1);
         getTotalCost();
@@ -525,6 +530,7 @@
         $('#createContractModal').modal('hide');
     });
 
+    //Tính tổng tiền tạm thời của hợp đồng đang tạo
     function calculateTotal() {
         let total = 0;
         // Tính tổng tiền từ listAttachFacility
@@ -539,6 +545,62 @@
 
         return total;
     }
+
+    //Kiểm tra định dạng ngày giờ của ngày làm hợp đồng và kết thúc hợp đồng
+    function validateDate(dateString) {
+        // Kiểm tra định dạng ngày giờ
+        var regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+        if (!regex.test(dateString)) {
+            return false;
+        }
+
+        // Chuyển đổi thành đối tượng Date
+        var date = new Date(dateString);
+
+        // Kiểm tra tính hợp lệ của đối tượng Date
+        if (isNaN(date.getTime())) {
+            return false;
+        }
+
+        return true;
+    }
+
+    // Hàm checkContract sử dụng hàm validateDate để kiểm tra tính hợp lệ của ngày làm hợp đồng và ngày kết thúc hợp đồng
+    function checkContract() {
+        var contractStart = $("#startDate").val();
+        var contractEnd = $("#endDate").val();
+
+        if (!validateDate(contractStart)) {
+            alert("Ngày giờ bắt đầu không hợp lệ!");
+        } else if (!validateDate(contractEnd)) {
+            alert("Ngày giờ kết thúc không hợp lệ!");
+        } else {
+            var start = new Date(contractStart);
+            var end = new Date(contractEnd);
+            var now = new Date();
+
+            if (start < now) {
+                alert("Ngày giờ bắt đầu phải lớn hơn hoặc bằng ngày giờ hiện tại!");
+            } else if (end <= start) {
+                alert("Ngày giờ kết thúc phải lớn hơn ngày giờ bắt đầu!");
+            } else {
+                $("#contractNew").submit();
+            }
+        }
+    }
+
+    const startDateInput = $('#startDate');
+
+    // Cập nhật thời gian định kỳ
+    setInterval(function() {
+        // Lấy thời gian hiện tại
+        const now = new Date();
+        // Chuyển đổi thời gian thành chuỗi định dạng chuẩn ISO 8601
+        const isoDate = now.toISOString().slice(0,16);
+        // Gán chuỗi định dạng ISO 8601 vào thuộc tính value của ô input datetime-local
+        startDateInput.val(isoDate);
+    }, 1000); // cập nhật thời gian mỗi giây (1000ms)
+
 </script>
 </body>
 

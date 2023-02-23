@@ -72,7 +72,7 @@
                                     '${customer.getCustomerType()}'
                                     )|" type="button" class="btn btn-warning" data-bs-toggle="modal"
                     data-bs-target="#exampleModal1">
-                 Sửa
+                Sửa
             </button>
         </td>
         <td>
@@ -131,19 +131,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/customers/create}" method="post" th:object="${customer}">
+                <form th:action="@{/customers/create}" method="post" id="customer" th:object="${customer}">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Họ và tên</label>
                         <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                                placeholder="VD: Nguyễn Văn An" required th:field="*{name}">
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Ngày sinh</label>
-                        <input type="date" class="form-control" id="exampleInputPassword1" placeholder="1970-11-07"
+                        <label for="birthdate" class="form-label">Ngày sinh</label>
+                        <input type="text" class="form-control" id="birthdate" placeholder="dd/mm/yyyy"
                                th:field="*{dateOfBirth}">
+
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Giới tính</label><br>
+                        <label class="form-label">Giới tính</label><br>
                         <label for="gender1"><input class="ms-3 me-1" checked type="radio" th:field="*{gender}"
                                                     id="gender1" th:value='true'>
                             Nam
@@ -182,7 +183,8 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
-                        <button type="submit" class="btn btn-primary">Lưu</button>
+                        <button type="button" class="btn btn-primary" id="submit-btn" onclick="checkBirthday()">Lưu
+                        </button>
                     </div>
                 </form>
             </div>
@@ -207,18 +209,18 @@
                                placeholder="VD: Nguyễn Văn An" required th:field="*{name}">
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Ngày sinh</label>
+                        <label class="form-label">Ngày sinh</label>
                         <input type="date" class="form-control" id="dayOfBirth1" placeholder="1970-11-07"
                                th:field="*{dateOfBirth}">
                     </div>
                     <div class="mb-3">
-                        <label for="exampleInputPassword1" class="form-label">Giới tính</label><br>
+                        <label class="form-label">Giới tính</label><br>
                         <label for="gender12"><input class="ms-3 me-1" checked type="radio" th:field="*{gender}"
-                                                    id="gender12" th:value='true'>
+                                                     id="gender12" th:value='true'>
                             Nam
                         </label>
                         <label for="gender122"><input class="ms-3 me-1" type="radio" th:field="*{gender}" id="gender122"
-                                                    th:value='false'>
+                                                      th:value='false'>
                             Nữ
                         </label>
                     </div>
@@ -283,8 +285,9 @@
     </div>
 </div>
 </body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
-    function getInfoCustomerEdit(id, name, dayOfBirth,gender, idCard, phoneNumber, email, address, customerType) {
+    function getInfoCustomerEdit(id, name, dayOfBirth, gender, idCard, phoneNumber, email, address, customerType) {
         document.getElementById("id1").value = id;
         document.getElementById("name1").value = name;
         document.getElementById("dayOfBirth1").value = dayOfBirth;
@@ -294,9 +297,61 @@
         document.getElementById("address1").value = address;
     }
 
-    function getInfoCustomerDelete(id,name) {
+    function getInfoCustomerDelete(id, name) {
         document.getElementById("idDelete").value = id;
         document.getElementById("nameDelete").innerText = name;
     }
+
+    // Khởi tạo datepicker
+    $(function () {
+        $("#birthdate").datepicker({
+            dateFormat: "dd/mm/yyyy",
+            changeYear: true,
+            yearRange: "-80:+0"
+        });
+    });
+
+    // Validate ngày giờ
+    function validateDate(dateString) {
+        // Kiểm tra định dạng ngày tháng
+        var regex = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+        if (!regex.test(dateString)) {
+            return false;
+        }
+
+        // Chuyển đổi thành đối tượng Date
+        var parts = dateString.split("/");
+        var day = parseInt(parts[0], 10);
+        var month = parseInt(parts[1], 10);
+        var year = parseInt(parts[2], 10);
+        var date = new Date(year, month - 1, day);
+
+        // Kiểm tra tính hợp lệ của đối tượng Date
+        if (date.getFullYear() != year || date.getMonth() + 1 != month || date.getDate() != day) {
+            return false;
+        }
+
+        return true;
+    }
+
+    function checkBirthday() {
+        var birthdate = $("#birthdate").val();
+        if (!validateDate(birthdate)) {
+            alert("Ngày sinh không hợp lệ!");
+        } else {
+            var date = new Date(birthdate);
+            var now = new Date();
+            console.log(date);
+            var year = date - now;
+            if(year > 90){
+                alert("Tuổi của bạn đã quá giới hạn so với quy định (<=90)");
+            } else if( year < 18){
+                alert("Bạn chưa đủ 18 tuổi")
+            } else {
+                $("#customer").submit();
+            }
+        }
+    }
+
 </script>
 </html>
