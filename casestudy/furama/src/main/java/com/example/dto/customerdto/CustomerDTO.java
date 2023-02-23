@@ -1,16 +1,13 @@
 package com.example.dto.customerdto;
 
 import com.example.model.customer.CustomerType;
-import org.springframework.validation.Errors;
-import org.springframework.validation.Validator;
 
 import javax.validation.constraints.*;
 
-public class CustomerDTO implements Validator {
+public class CustomerDTO{
     private Long id;
     private CustomerType customerType;
     @Size(max = 45)
-    @NotNull
     @NotBlank(message = "Vui lòng nhập tên khách hàng")
     @Pattern(regexp = "^(?!.*\\d)[\\p{Lu}][\\p{Ll}]*([\\s][\\p{Lu}][\\p{Ll}]*)*$|^([\\p{Lu}][\\p{Ll}]*)$\n",
             message = "Tên khách hàng chưa đúng định dạng, vd tên đúng định dạng: Nguyen Van A, Nguyễn Văn A")
@@ -115,15 +112,5 @@ public class CustomerDTO implements Validator {
 
     public void setFlag(boolean flag) {
         this.flag = flag;
-    }
-
-    @Override
-    public boolean supports(Class<?> clazz) {
-        return CustomerDTO.class.isAssignableFrom(clazz);
-    }
-
-    @Override
-    public void validate(Object target, Errors errors) {
-
     }
 }

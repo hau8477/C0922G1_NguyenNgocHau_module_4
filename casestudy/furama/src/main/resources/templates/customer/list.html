@@ -123,19 +123,23 @@
 
 <footer th:replace="/layout :: footer"></footer>
 <!--Modal create-->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div th:class="${hasErrors == 'true' ? 'modal fade show' : 'modal fade'}" id="exampleModal"
+     tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true"
+     th:style="${hasErrors == 'true' ? 'display: block' : 'display: none'}">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel1">Thêm mới khách hàng</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close"
+                        th:attr="onclick=|onCloseModal()|" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/customers/create}" method="post" id="customer" th:object="${customer}">
+                <form th:action="@{/customers/create}" method="post" id="customer" th:object="${customerDTO}">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Họ và tên</label>
                         <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
                                placeholder="VD: Nguyễn Văn An" required th:field="*{name}">
+                        <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="form-text"></p>
                     </div>
                     <div class="mb-3">
                         <label for="birthdate" class="form-label">Ngày sinh</label>
@@ -158,16 +162,20 @@
                         <label for="exampleInputEmail2" class="form-label">CCCD/CMND</label>
                         <input type="text" class="form-control" id="exampleInputEmail2" aria-describedby="emailHelp"
                                placeholder="VD: 13549681324" th:field="*{idCard}">
+                        <p th:if="${#fields.hasErrors('idCard')}" th:errors="*{idCard}" class="form-text"></p>
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputEmail4" class="form-label">Số điện thoại</label>
                         <input type="text" class="form-control" id="exampleInputEmail4" aria-describedby="emailHelp"
                                placeholder="VD: 4562317861" th:field="*{phoneNumber}">
+                        <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="form-text"></p>
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputEmail5" class="form-label">Email</label>
                         <input type="email" class="form-control" id="exampleInputEmail5" aria-describedby="emailHelp"
                                placeholder="VD: annguyen@gamil.com" th:field="*{email}" required>
+                        <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="form-text"></p>
+
                     </div>
                     <div class="mb-3">
                         <label for="exampleInputEmail6" class="form-label">Địa chỉ</label>
@@ -182,7 +190,8 @@
                         </select>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"
+                                th:attr="onclick=|onCloseModal()|">Thoát</button>
                         <button type="button" class="btn btn-primary" id="submit-btn" onclick="checkBirthday()">Lưu
                         </button>
                     </div>
@@ -201,7 +210,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/customers/update}" method="post" th:object="${customer}">
+                <form th:action="@{/customers/update}" method="post" th:object="${customerDTO}">
                     <input type="number" hidden id="id1" th:field="*{id}">
                     <div class="mb-3">
                         <label for="exampleInputEmail1" class="form-label">Họ và tên</label>
@@ -342,6 +351,11 @@
                 $("#customer").submit();
             }
         }
+    }
+
+    function onCloseModal() {
+        document.getElementById('exampleModal').style.display = 'none';
+        window.location.href = "/customers/";
     }
 
 </script>
