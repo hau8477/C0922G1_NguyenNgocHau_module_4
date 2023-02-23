@@ -1,7 +1,7 @@
 package com.example.service.contract.impl;
 
-import com.example.dto.ContractDTO;
-import com.example.dto.ContractDetailRequestDTO;
+import com.example.dto.contractdto.ContractDTO;
+import com.example.dto.contractdto.ContractDetailRequestDTO;
 import com.example.model.contract.AttachFacility;
 import com.example.model.contract.Contract;
 import com.example.model.contract.ContractDetail;

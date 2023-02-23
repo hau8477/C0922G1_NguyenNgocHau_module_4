@@ -1,6 +1,6 @@
 package com.example.controller.contract;
 
-import com.example.dto.ContractDetailRequestDTO;
+import com.example.dto.contractdto.ContractDetailRequestDTO;
 import com.example.model.contract.Contract;
 import com.example.model.contract.ContractDetail;
 import com.example.service.contract.IAttachFacilityService;

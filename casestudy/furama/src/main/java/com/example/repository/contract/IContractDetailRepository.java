@@ -1,6 +1,6 @@
 package com.example.repository.contract;
 
-import com.example.dto.ContractDetailDTO;
+import com.example.dto.contractdto.ContractDetailDTO;
 import com.example.model.contract.ContractDetail;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
@@ -8,7 +8,6 @@ import org.springframework.data.repository.query.Param;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 public interface IContractDetailRepository extends JpaRepository<ContractDetail, Long> {
 

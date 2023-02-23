@@ -1,4 +1,4 @@
-package com.example.dto;
+package com.example.dto.contractdto;
 
 public class ContractDetailRequestDTO {
     private Long id;

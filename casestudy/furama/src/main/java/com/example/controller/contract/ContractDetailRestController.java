@@ -1,6 +1,6 @@
 package com.example.controller.contract;
 
-import com.example.dto.ContractDetailDTO;
+import com.example.dto.contractdto.ContractDetailDTO;
 import com.example.service.contract.IContractDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

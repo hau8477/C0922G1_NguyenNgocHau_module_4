@@ -214,7 +214,7 @@
                     <div class="mb-3">
                         <label class="form-label">Dịch vụ</label>
                         <select th:field="*{facility}" class="form-select" aria-label="Default select example"
-                                id="facility" >
+                                id="facility" onchange="getTotalCost()">
                             <option th:each="facility: ${facilities}" th:text="${facility.getName()}"
                                     th:value="${facility.getId()}" th:data-cost="${facility.getCost()}"></option>
                         </select>
@@ -317,10 +317,7 @@
 <script>
     function clearListAT() {
         listAttachFacility.splice(0, listAttachFacility.length);
-        // Tính tổng tiền
-        var totalCost = calculateTotal();
-        // Hiển thị tổng tiền
-        $('#totalCost').val(totalCost);
+        getTotalCost();
     }
 
     // Xóa nội dung của tbody danh sách dịch vụ đi kèm khi modal bị ẩn
@@ -428,14 +425,18 @@
         console.log(attachFacility);
         listAttachFacility.push(attachFacility);
 
-        // Tính tổng tiền
-        var totalCost = calculateTotal();
-        // Hiển thị tổng tiền
-        $('#totalCost').val(totalCost);
+        getTotalCost();
 
         $("#staticBackdrop1").modal('hide');
         $("#createContractModal").modal('show');
         display();
+    }
+
+    function getTotalCost() {
+        // Tính tổng tiền
+        var totalCost = calculateTotal();
+        // Hiển thị tổng tiền
+        $('#totalCost').val(totalCost);
     }
 
     function display() {
@@ -459,6 +460,7 @@
 
     function deleteAT(id) {
         listAttachFacility.splice(id, 1);
+        getTotalCost();
         display();
     }
 
