@@ -139,7 +139,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="birthdate" class="form-label">Ngày sinh</label>
-                        <input type="text" class="form-control" id="birthdate" placeholder="dd/mm/yyyy"
+                        <input type="datetime-local" class="form-control" id="birthdate" placeholder="dd/mm/yyyy"
                                th:field="*{dateOfBirth}">
 
                     </div>
@@ -302,51 +302,42 @@
         document.getElementById("nameDelete").innerText = name;
     }
 
-    // Khởi tạo datepicker
-    $(function () {
-        $("#birthdate").datepicker({
-            dateFormat: "dd/mm/yyyy",
-            changeYear: true,
-            yearRange: "-80:+0"
-        });
-    });
-
-    // Validate ngày giờ
+    //Kiểm tra định dạng ngày giờ của ngày sinh
     function validateDate(dateString) {
-        // Kiểm tra định dạng ngày tháng
-        var regex = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+        // Kiểm tra định dạng ngày giờ
+        var regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
         if (!regex.test(dateString)) {
             return false;
         }
 
         // Chuyển đổi thành đối tượng Date
-        var parts = dateString.split("/");
-        var day = parseInt(parts[0], 10);
-        var month = parseInt(parts[1], 10);
-        var year = parseInt(parts[2], 10);
-        var date = new Date(year, month - 1, day);
+        var date = new Date(dateString);
 
         // Kiểm tra tính hợp lệ của đối tượng Date
-        if (date.getFullYear() != year || date.getMonth() + 1 != month || date.getDate() != day) {
+        if (isNaN(date.getTime())) {
             return false;
         }
 
         return true;
     }
 
+    //Kiểm tra định dạng ngày sinh và tính hợp lệ
     function checkBirthday() {
         var birthdate = $("#birthdate").val();
         if (!validateDate(birthdate)) {
             alert("Ngày sinh không hợp lệ!");
         } else {
-            var date = new Date(birthdate);
-            var now = new Date();
-            console.log(date);
-            var year = date - now;
-            if(year > 90){
+            var birthYear = new Date(birthdate).getFullYear();
+            var currentYear = new Date().getFullYear();
+            var age = currentYear - birthYear;
+            var birthdateThisYear = new Date(currentYear, new Date(birthdate).getMonth(), new Date(birthdate).getDate());
+            if (new Date() < birthdateThisYear) {
+                age--;
+            }
+            if (age > 90) {
                 alert("Tuổi của bạn đã quá giới hạn so với quy định (<=90)");
-            } else if( year < 18){
-                alert("Bạn chưa đủ 18 tuổi")
+            } else if (age < 18) {
+                alert("Bạn chưa đủ 18 tuổi");
             } else {
                 $("#customer").submit();
             }

@@ -12,12 +12,15 @@ public class CustomerDTO implements Validator {
     @Size(max = 45)
     @NotNull
     @NotBlank(message = "Vui lòng nhập tên khách hàng")
-    @Pattern(regexp = "^(?!.*\\d)[\\p{Lu}][\\p{Ll}]*([\\s][\\p{Lu}][\\p{Ll}]*)*$|^([\\p{Lu}][\\p{Ll}]*)$\n", message = "Tên khách hàng chưa đúng định dạng")
+    @Pattern(regexp = "^(?!.*\\d)[\\p{Lu}][\\p{Ll}]*([\\s][\\p{Lu}][\\p{Ll}]*)*$|^([\\p{Lu}][\\p{Ll}]*)$\n",
+            message = "Tên khách hàng chưa đúng định dạng")
     private String name;
     private String dateOfBirth;
     private boolean gender;
     @Size(max = 45)
-    @NotNull
+    @NotBlank(message = "Vui lòng nhập số CMND/CCCD")
+    @Pattern(regexp = "", message = "Số CMND/CCCD phải đúng định dạng, vd:XXXXXXXXX hoặc XXXXXXXXXXXX " +
+            "(X là số 0-9, độ dài CMND 9 số, CCCD 12 số).")
     private String idCard;
     @Size(max = 45)
     @NotBlank(message = "Vui lòng nhập số điện thoại")
@@ -25,7 +28,7 @@ public class CustomerDTO implements Validator {
             "090xxxxxxx hoặc 091xxxxxxx hoặc (84)+90xxxxxxx hoặc (84)+91xxxxxxx.")
     private String phoneNumber;
     @Size(max = 45)
-    @Email
+    @Pattern(regexp = "^[\\w._%+-]+@[\\w.-]+\\.[A-Za-z]{2,}$", message = "Email phải đúng định dạng, vd: hau123@gmail.com")
     private String email;
     @Size(max = 45)
     private String address;
