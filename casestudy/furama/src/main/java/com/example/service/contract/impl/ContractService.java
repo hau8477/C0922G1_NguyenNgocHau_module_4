@@ -24,10 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Service
 public class ContractService implements IContractService {
@@ -73,11 +70,16 @@ public class ContractService implements IContractService {
         }
 
         for (ContractDetailRequestDTO contractDetailRequestDTO : contractDetails) {
+            if(contractDetailRequestDTO.getQuantity() <= 0){
+                System.err.println("Số lượng của dịch vụ đi kèm nhỏ hơn 1");
+                return false;
+            }
+
             Optional<AttachFacility> attachFacility =
                     this.attachFacilityRepository.findById(contractDetailRequestDTO.getId());
 
-            if (!attachFacility.isPresent() || contractDetailRequestDTO.getQuantity() <= 0) {
-                System.err.println("Attach facility không tồn tại hoặc số lượng nhỏ hơn 0");
+            if (!attachFacility.isPresent()) {
+                System.err.println("Attach facility không tồn tại");
                 return false;
             }
         }
@@ -136,6 +138,5 @@ public class ContractService implements IContractService {
 //        contractDetailRepository.saveAll(contractDetailsNew);
 //        return true;
 //    }
-
 
 }
