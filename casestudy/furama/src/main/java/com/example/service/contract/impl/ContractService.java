@@ -67,17 +67,21 @@ public class ContractService implements IContractService {
             return false;
         }
 
-        this.contractRepository.save(contract);
-
         for (ContractDetailRequestDTO contractDetailRequestDTO : contractDetails) {
-
             Optional<AttachFacility> attachFacility =
                     this.attachFacilityRepository.findById(contractDetailRequestDTO.getId());
 
             if (!attachFacility.isPresent() || contractDetailRequestDTO.getQuantity() <= 0) {
-                System.out.println("Attach facility không tồn tại hoặc số lượng nhỏ hơn 0");
+                System.err.println("Attach facility không tồn tại hoặc số lượng nhỏ hơn 0");
                 return false;
             }
+        }
+
+        this.contractRepository.save(contract);
+
+        for (ContractDetailRequestDTO contractDetailRequestDTO : contractDetails) {
+            Optional<AttachFacility> attachFacility =
+                    this.attachFacilityRepository.findById(contractDetailRequestDTO.getId());
 
             ContractDetail contractDetailNew = new ContractDetail();
             contractDetailNew.setContract(contract);
