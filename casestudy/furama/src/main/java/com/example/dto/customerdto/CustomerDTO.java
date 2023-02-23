@@ -13,7 +13,7 @@ public class CustomerDTO implements Validator {
     @NotNull
     @NotBlank(message = "Vui lòng nhập tên khách hàng")
     @Pattern(regexp = "^(?!.*\\d)[\\p{Lu}][\\p{Ll}]*([\\s][\\p{Lu}][\\p{Ll}]*)*$|^([\\p{Lu}][\\p{Ll}]*)$\n",
-            message = "Tên khách hàng chưa đúng định dạng")
+            message = "Tên khách hàng chưa đúng định dạng, vd tên đúng định dạng: Nguyen Van A, Nguyễn Văn A")
     private String name;
     private String dateOfBirth;
     private boolean gender;
