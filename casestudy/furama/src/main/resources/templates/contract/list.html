@@ -122,6 +122,26 @@
             <div class="modal-body">
                 <form th:action="@{/save-contract-detail}" th:object="${contractDetail}" method="post">
                     <input id="contractId1" hidden th:field="*{contract}">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>Dịch vụ</th>
+                            <th>Trạng thái</th>
+                            <th>Đơn vị</th>
+                            <th>Giá tiền</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="attachFacility, iState : ${attachFacilities}">
+                            <td th:text="${iState.count}"></td>
+                            <td th:text="${attachFacility.getName()}"></td>
+                            <td th:text="${attachFacility.getStatus()}"></td>
+                            <td th:text="${attachFacility.getUnit()}"></td>
+                            <td th:text="${attachFacility.getCost()}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
                     <div class="mb-3">
                         <select class="form-select" aria-label="Default select example" th:field="*{attachFacility}">
                             <option th:each="attachFacility1: ${attachFacilities}"
@@ -172,7 +192,11 @@
                                placeholder="VD: 13549681324" th:field="*{deposit}">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label">Khách hàng</label>
+                        <label class="form-label">Khách hàng
+                            <a href="/customers/">
+                                <button type="button" class="btn btn-secondary">Thêm mới khách hàng ở đây</button>
+                            </a>
+                        </label>
                         <select th:field="*{customer}" class="form-select" aria-label="Default select example"
                                 id="customer">
                             <option th:each="customer: ${customers}" th:text="${customer.getName()}"
@@ -190,9 +214,9 @@
                     <div class="mb-3">
                         <label class="form-label">Dịch vụ</label>
                         <select th:field="*{facility}" class="form-select" aria-label="Default select example"
-                                id="facility">
+                                id="facility" >
                             <option th:each="facility: ${facilities}" th:text="${facility.getName()}"
-                                    th:value="${facility.getId()}"></option>
+                                    th:value="${facility.getId()}" th:data-cost="${facility.getCost()}"></option>
                         </select>
                     </div>
                     <div class="mb-3">
@@ -212,6 +236,7 @@
                                     <th>STT</th>
                                     <th>Dịch vụ đi kèm</th>
                                     <th>Số lượng</th>
+                                    <th>Thành tiền</th>
                                     <th></th>
                                 </tr>
                                 </thead>
@@ -220,6 +245,10 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Tổng tiền tạm tính</label>
+                        <input type="text" class="form-control" id="totalCost" aria-describedby="emailHelp">
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
@@ -240,11 +269,32 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>STT</th>
+                        <th>Dịch vụ</th>
+                        <th>Trạng thái</th>
+                        <th>Đơn vị</th>
+                        <th>Giá tiền</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="attachFacility, iState : ${attachFacilities}">
+                        <td th:text="${iState.count}"></td>
+                        <td th:text="${attachFacility.getName()}"></td>
+                        <td th:text="${attachFacility.getStatus()}"></td>
+                        <td th:text="${attachFacility.getUnit()}"></td>
+                        <td th:text="${attachFacility.getCost()}"></td>
+                    </tr>
+                    </tbody>
+                </table>
                 <div class="mb-3">
                     <select class="form-select" aria-label="Default select example" id="nameAT">
                         <option th:each="attachFacility: ${attachFacilities}"
                                 th:text="${attachFacility.getName()}"
-                                th:value="${attachFacility.getId()}"></option>
+                                th:value="${attachFacility.getId()}"
+                                th:data-cost="${attachFacility.getCost()}"></option>
                     </select>
                 </div>
                 <div class="mb-3">
@@ -267,6 +317,10 @@
 <script>
     function clearListAT() {
         listAttachFacility.splice(0, listAttachFacility.length);
+        // Tính tổng tiền
+        var totalCost = calculateTotal();
+        // Hiển thị tổng tiền
+        $('#totalCost').val(totalCost);
     }
 
     // Xóa nội dung của tbody danh sách dịch vụ đi kèm khi modal bị ẩn
@@ -274,7 +328,7 @@
         $("#tbody").empty();
     });
 
-    // Xóa nội dung của content khi modal bị ẩn
+    // Xóa nội dung của modal tạo hợp đồng khi modal bị ẩn
     $("#createContractModal").on("hidden.bs.modal", function () {
         $("#content").empty();
     });
@@ -322,12 +376,20 @@
     }
 
     class AttachFacility {
-        constructor(id, name, quantity) {
+        constructor(id, name, quantity, cost) {
             this._id = id;
             this._name = name;
             this._quantity = quantity;
+            this._cost = cost
         }
 
+        get cost() {
+            return this._cost;
+        }
+
+        set cost(value) {
+            this._cost = value;
+        }
 
         get id() {
             return this._id;
@@ -360,10 +422,17 @@
         var selectedId = $("#nameAT").val();
         var selectedName = $("#nameAT option:selected").text();
         let quantity = $("#quantityAT").val();
+        var selectedCost = $("#nameAT option:selected").data("cost");
 
-        let attachFacility = new AttachFacility(selectedId, selectedName, quantity);
+        let attachFacility = new AttachFacility(selectedId, selectedName, quantity, selectedCost);
         console.log(attachFacility);
         listAttachFacility.push(attachFacility);
+
+        // Tính tổng tiền
+        var totalCost = calculateTotal();
+        // Hiển thị tổng tiền
+        $('#totalCost').val(totalCost);
+
         $("#staticBackdrop1").modal('hide');
         $("#createContractModal").modal('show');
         display();
@@ -378,6 +447,7 @@
     <td>${i + 1}</td>
     <td>${listAttachFacility[i].name}</td>
     <td>${listAttachFacility[i].quantity}</td>
+    <td>${listAttachFacility[i].quantity * listAttachFacility[i].cost}</td>
     <td>
     <button type="button" onclick="(() => deleteAT(${i}))()" class="btn btn-danger">Xóa</button>
 </td>
@@ -452,6 +522,21 @@
         });
         $('#createContractModal').modal('hide');
     });
+
+    function calculateTotal() {
+        let total = 0;
+        // Tính tổng tiền từ listAttachFacility
+        for (let i = 0; i < listAttachFacility.length; i++) {
+            let attachFacility = listAttachFacility[i];
+            total += attachFacility.quantity * attachFacility.cost;
+        }
+
+        // Tính tổng tiền từ <select>
+        let selectedCost = +$("#facility option:selected").data("cost");
+        total += selectedCost;
+
+        return total;
+    }
 </script>
 </body>
 
