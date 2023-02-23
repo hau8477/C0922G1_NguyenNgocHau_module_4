@@ -20,10 +20,14 @@ import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 @Service
 public class ContractService implements IContractService {
@@ -59,6 +63,7 @@ public class ContractService implements IContractService {
     }
 
     @Override
+    @Transactional
     public boolean saveContract(Contract contract, List<ContractDetailRequestDTO> contractDetails) {
         Optional<Customer> optionalCustomer = this.customerRepository.findById(contract.getCustomer().getId());
         Optional<Employee> optionalEmployee = this.employeeRepository.findById(contract.getEmployee().getId());
@@ -92,6 +97,45 @@ public class ContractService implements IContractService {
         }
         return true;
     }
+
+//    @Override
+//    @Transactional
+//    public boolean saveContract(Contract contract, List<ContractDetailRequestDTO> contractDetails) {
+//        Customer customer = customerRepository.findById(contract.getCustomer().getId())
+//                .orElseThrow(() -> new IllegalArgumentException("Khách hàng không tồn tại"));
+//        Employee employee = employeeRepository.findById(contract.getEmployee().getId())
+//                .orElseThrow(() -> new IllegalArgumentException("Nhân viên không tồn tại"));
+//
+//        List<AttachFacility> attachFacilities = attachFacilityRepository.findAllById(
+//                contractDetails.stream().map(ContractDetailRequestDTO::getId).collect(Collectors.toList())
+//        );
+//        Map<Long, AttachFacility> attachFacilityMap = attachFacilities.stream()
+//                .collect(Collectors.toMap(AttachFacility::getId, Function.identity()));
+//
+//        boolean isInvalidContractDetails = contractDetails.stream()
+//                .anyMatch(detail -> !attachFacilityMap.containsKey(detail.getId()) || detail.getQuantity() <= 0);
+//
+//        if (isInvalidContractDetails) {
+//            throw new IllegalArgumentException("Attach facility không tồn tại hoặc số lượng nhỏ hơn 0");
+//        }
+//
+//        contract.setCustomer(customer);
+//        contract.setEmployee(employee);
+//        contractRepository.save(contract);
+//
+//        List<ContractDetail> contractDetailsNew = contractDetails.stream()
+//                .map(detail -> {
+//                    ContractDetail contractDetail = new ContractDetail();
+//                    contractDetail.setContract(contract);
+//                    contractDetail.setAttachFacility(attachFacilityMap.get(detail.getId()));
+//                    contractDetail.setQuantity(detail.getQuantity());
+//                    return contractDetail;
+//                })
+//                .collect(Collectors.toList());
+//
+//        contractDetailRepository.saveAll(contractDetailsNew);
+//        return true;
+//    }
 
 
 }
