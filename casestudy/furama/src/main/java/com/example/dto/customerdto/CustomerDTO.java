@@ -24,8 +24,8 @@ public class CustomerDTO implements Validator {
     private String idCard;
     @Size(max = 45)
     @NotBlank(message = "Vui lòng nhập số điện thoại")
-    @Pattern(regexp = "^(\\(84\\)\\+)?(09|01)\\d{8}$", message = "Số điện thoại chưa đúng định dạng, số điện thoại phải có dạng: " +
-            "090xxxxxxx hoặc 091xxxxxxx hoặc (84)+90xxxxxxx hoặc (84)+91xxxxxxx.")
+    @Pattern(regexp = "^((\\+?84)|0)(9[01]\\d{7})$", message = "Số điện thoại chưa đúng định dạng, số điện thoại phải có dạng: " +
+            "090xxxxxxx hoặc 091xxxxxxx hoặc +8490xxxxxxx hoặc +8491xxxxxxx.")
     private String phoneNumber;
     @Size(max = 45)
     @Pattern(regexp = "^[\\w._%+-]+@[\\w.-]+\\.[A-Za-z]{2,}$", message = "Email phải đúng định dạng, vd: hau123@gmail.com")
