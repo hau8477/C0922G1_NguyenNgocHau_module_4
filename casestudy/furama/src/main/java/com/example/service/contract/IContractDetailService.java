@@ -6,6 +6,6 @@ import com.example.model.contract.ContractDetail;
 import java.util.List;
 
 public interface IContractDetailService {
-    List<ContractDetailDTO> getContractDetailsDTOByContractId(Long contractId);
+    List<ContractDetail> getContractDetailsByContractId(Long contractId);
     boolean save(ContractDetail contractDetail);
 }

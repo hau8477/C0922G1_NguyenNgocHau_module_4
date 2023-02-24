@@ -61,6 +61,8 @@ public class CustomerController {
                        @RequestParam(required = false, defaultValue = "0") Long customerTypeId,
                        @PageableDefault(page = 0, size = 5)Pageable pageable,
                        Model model, RedirectAttributes redirectAttributes){
+        //Xóa khoảng trắng đầu cuối
+        customerDTO.setName(customerDTO.getName().trim());
         if(bindingResult.hasErrors()){
             Optional<CustomerType> customerType = this.customerTypeService.findById(customerTypeId);
             Page<Customer> customers;
@@ -100,6 +102,8 @@ public class CustomerController {
                          @RequestParam(required = false, defaultValue = "0") Long customerTypeId,
                          @PageableDefault(page = 0, size = 5)Pageable pageable,
                          Model model, RedirectAttributes redirectAttributes){
+        //Xóa khoảng trắng đầu cuối
+        customerDTO.setName(customerDTO.getName().trim());
         if(bindingResult.hasErrors()){
             Optional<CustomerType> customerType = this.customerTypeService.findById(customerTypeId);
             Page<Customer> customers;
@@ -110,7 +114,7 @@ public class CustomerController {
                 customers = this.customerService.findAllByNameContainingAndEmailContaining(
                         nameSearch, emailSearch, pageable);
             }
-            model.addAttribute("hasErrors","true");
+            model.addAttribute("hasErrors1","true");
             model.addAttribute("customers", customers);
             model.addAttribute("customerTypes", this.customerTypeService.findAll());
             model.addAttribute("customerDTO", customerDTO);

@@ -1,6 +1,5 @@
 package com.example.service.contract.impl;
 
-import com.example.dto.contractdto.ContractDetailDTO;
 import com.example.model.contract.AttachFacility;
 import com.example.model.contract.Contract;
 import com.example.model.contract.ContractDetail;
@@ -24,8 +23,8 @@ public class ContractDetailService implements IContractDetailService {
     private IAttachFacilityRepository attachFacilityRepository;
 
     @Override
-    public List<ContractDetailDTO> getContractDetailsDTOByContractId(Long contractId) {
-        return this.contractDetailRepository.getContractDetailsDTOByContractId(contractId);
+    public List<ContractDetail> getContractDetailsByContractId(Long contractId) {
+        return this.contractDetailRepository.findAllByContract_Id(contractId);
     }
 
     @Override

@@ -15,8 +15,13 @@ public interface IFacilityRepository extends JpaRepository<Facility, Long> {
     Page<Facility> findAllByNameContainingAndFacilityType_Id(@Param("name") String name,
                                                              @Param("facilityTypeId") Long facilityTypeId,
                                                              Pageable pageable);
+
     @Query(value = "select * from facility where name like concat('%',:name,'%')" +
             "and flag=true", nativeQuery = true)
     Page<Facility> findAllByNameContaining(@Param("name") String name, Pageable pageable);
+
     Optional<Facility> findByName(String name);
+
+    @Query(value = "select * from facility where (name = :name and flag=true) and id != :id", nativeQuery = true)
+    Optional<Facility> findByNotId(@Param("name") String name, @Param("id") Long id);
 }

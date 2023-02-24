@@ -1,24 +1,27 @@
-package com.example.model.facility;
+package com.example.dto.facilitydto;
+
+import com.example.model.facility.FacilityType;
+import com.example.model.facility.RentType;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
-@Entity
-public class Facility {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class FacilityDTO {
     private Long id;
-    @ManyToOne
-    @JoinColumn(name = "facility_type_id", referencedColumnName = "id", nullable = false)
     private FacilityType facilityType;
-    @ManyToOne
-    @JoinColumn(name = "rent_type_id", referencedColumnName = "id", nullable = false)
     private RentType rentType;
     @Size(max = 45)
-    @Column(columnDefinition = "varchar(45)",nullable = false, unique = true)
+    @NotBlank(message = "Vui lòng nhập tên dịch vụ")
+    @Pattern(regexp = "^[A-Z][a-z]*(\\s[A-Z][a-z]*)*\\s\\d*$", message = "Tên dịch vụ không được chứa kí tự đặc biệt")
     private String name;
+    @Pattern(regexp = "^[0-9]+(\\.[0-9]+)?$", message = "Vui lòng nhập đúng định dạng, vd: 0.5 hoặc 10 và phải là số dương")
     private String area;
+    @NotBlank(message = "Vui lòng nhập giá tiền của dịch vụ")
+    @Pattern(regexp = "^[0-9]+(\\.[0-9]+)?$", message = "Vui lòng nhập đúng định dạng, vd: 0.5 hoặc 10 và phải là số dương")
     private String cost;
+    @Pattern(regexp = "^[1-9][0-9]*|0[1-9][0-9]*$", message = "Số lượng người phải là số nguyên dương")
     private String maxPeople;
     @Size(max = 45)
     @Column(columnDefinition = "varchar(45)")
@@ -26,13 +29,14 @@ public class Facility {
     @Size(max = 45)
     @Column(columnDefinition = "varchar(45)")
     private String descriptionOtherConvenience;
+    @Pattern(regexp = "^[0-9]+(\\.[0-9]+)?$", message = "Vui lòng nhập đúng định dạng, vd: 0.5 hoặc 10 và phải là số dương")
     private String poolArea;
+    @Pattern(regexp = "^[0-9]+$|^0$", message = "Số tầng phải là số nguyên dương")
     private String numberOfFloors;
     private String facilityFree;
     private boolean flag = true;
 
-
-    public Facility() {
+    public FacilityDTO() {
     }
 
     public Long getId() {

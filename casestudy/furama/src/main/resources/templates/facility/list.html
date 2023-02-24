@@ -133,15 +133,17 @@
 </nav>
 <footer th:replace="/layout :: footer"></footer>
 <!--Modal create-->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div th:class="${hasErrors == 'true' ? 'modal fade show' : 'modal fade'}"
+     th:style="${hasErrors == 'true' ? 'display: block' : 'display: none'}"
+        class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel1">Thêm mới dịch vụ</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="onCloseModal()" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/facilities/create}" th:object="${facilityNew}" method="post">
+                <form th:action="@{/facilities/create}" th:object="${facilityDTO}" method="post">
                     <div class="mb-3">
                         <label for="facilityTypeId" class="form-label">Loại dịch vụ</label>
                         <div class="mb-3">
@@ -158,21 +160,30 @@
                         <label for="nameService" class="form-label">Tên dịch vụ</label>
                         <input type="text" class="form-control" id="nameService" aria-describedby="emailHelp"
                                th:field="*{name}">
+                        <p style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                           class="form-text">
+                        </p>
                     </div>
                     <div class="mb-3">
                         <label for="area" class="form-label">Diện tích</label>
                         <input type="number" class="form-control" id="area"
                                th:field="*{area}">
+                        <p style="color: red" th:if="${#fields.hasErrors('area')}" th:errors="*{area}"
+                           class="form-text"></p>
                     </div>
                     <div class="mb-3">
                         <label for="cost" class="form-label">Giá</label>
                         <input type="number" class="form-control" id="cost" aria-describedby="emailHelp"
                                th:field="*{cost}">
+                        <p style="color: red" th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}"
+                           class="form-text"></p>
                     </div>
                     <div class="mb-3">
                         <label for="maxPeople" class="form-label">Số lượng người tối đa</label>
                         <input type="number" class="form-control" id="maxPeople" aria-describedby="emailHelp"
                                th:field="*{maxPeople}">
+                        <p style="color: red" th:if="${#fields.hasErrors('maxPeople')}" th:errors="*{maxPeople}"
+                           class="form-text"></p>
                     </div>
                     <div class="mb-3">
                         <label for="rentType" class="form-label">Kiểu thuê</label>
@@ -200,11 +211,15 @@
                         <label for="poolArea" class="form-label">Diện tích hồ bơi</label>
                         <input type="number" class="form-control" id="poolArea" aria-describedby="emailHelp"
                                th:field="*{poolArea}">
+                        <p style="color: red" th:if="${#fields.hasErrors('poolArea')}" th:errors="*{poolArea}"
+                           class="form-text"></p>
                     </div>
                     <div class="mb-3">
                         <label for="numberOfFloors" class="form-label">Số tầng</label>
                         <input type="number" class="form-control" id="numberOfFloors" aria-describedby="emailHelp"
                                th:field="*{numberOfFloors}">
+                        <p style="color: red" th:if="${#fields.hasErrors('numberOfFloors')}" th:errors="*{numberOfFloors}"
+                           class="form-text"></p>
                     </div>
                     <div class="mb-3">
                         <label for="facilityFree" class="form-label">Dịch vụ miễn phí</label>
@@ -212,7 +227,7 @@
                                th:field="*{facilityFree}">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="button" class="btn btn-secondary" onclick="onCloseModal()" data-bs-dismiss="modal">Thoát</button>
                         <button type="submit" class="btn btn-primary">Lưu</button>
                     </div>
                 </form>
@@ -222,15 +237,17 @@
 </div>
 
 <!--Modal edit-->
-<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
+<div    th:class="${hasErrors1 == 'true' ? 'modal fade show' : 'modal fade'}"
+        th:style="${hasErrors1 == 'true' ? 'display: block' : 'display: none'}"
+        class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel1" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <h1 class="modal-title fs-5" id="exampleModalLabel2">Chỉnh sửa dịch vụ</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="onCloseModal()" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form th:action="@{/facilities/update}" th:object="${facilityNew}" method="post">
+                <form th:action="@{/facilities/update}" th:object="${facilityDTO}" method="post">
                     <input type="number" id="idServiceEdit" hidden th:field="*{id}">
                     <div class="mb-3">
                         <label for="facilityTypeId" class="form-label">Loại dịch vụ</label>
@@ -249,21 +266,30 @@
                         <label for="nameService" class="form-label">Tên dịch vụ</label>
                         <input type="text" class="form-control" id="nameServiceEdit" aria-describedby="emailHelp"
                                th:field="*{name}">
+                        <p style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                           class="form-text">
+                        </p>
                     </div>
                     <div class="mb-3">
                         <label for="area" class="form-label">Diện tích</label>
                         <input type="number" class="form-control" id="areaEdit"
                                th:field="*{area}">
+                        <p style="color: red" th:if="${#fields.hasErrors('area')}" th:errors="*{area}"
+                           class="form-text"></p>
                     </div>
                     <div class="mb-3">
                         <label for="cost" class="form-label">Giá</label>
                         <input type="number" class="form-control" id="costEdit" aria-describedby="emailHelp"
                                th:field="*{cost}">
+                        <p style="color: red" th:if="${#fields.hasErrors('cost')}" th:errors="*{cost}"
+                           class="form-text"></p>
                     </div>
                     <div class="mb-3">
                         <label for="maxPeople" class="form-label">Số lượng người tối đa</label>
                         <input type="number" class="form-control" id="maxPeopleEdit" aria-describedby="emailHelp"
                                th:field="*{maxPeople}">
+                        <p style="color: red" th:if="${#fields.hasErrors('maxPeople')}" th:errors="*{maxPeople}"
+                           class="form-text"></p>
                     </div>
                     <div class="mb-3">
                         <label for="rentType" class="form-label">Kiểu thuê</label>
@@ -291,11 +317,15 @@
                         <label for="poolArea" class="form-label">Diện tích hồ bơi</label>
                         <input type="number" class="form-control" id="poolAreaEdit" aria-describedby="emailHelp"
                                th:field="*{poolArea}">
+                        <p style="color: red" th:if="${#fields.hasErrors('poolArea')}" th:errors="*{poolArea}"
+                           class="form-text"></p>
                     </div>
                     <div class="mb-3">
                         <label for="numberOfFloors" class="form-label">Số tầng</label>
                         <input type="number" class="form-control" id="numberOfFloorsEdit" aria-describedby="emailHelp"
                                th:field="*{numberOfFloors}">
+                        <p style="color: red" th:if="${#fields.hasErrors('numberOfFloors')}" th:errors="*{numberOfFloors}"
+                           class="form-text"></p>
                     </div>
                     <div class="mb-3">
                         <label for="facilityFree" class="form-label">Dịch vụ miễn phí</label>
@@ -303,7 +333,7 @@
                                th:field="*{facilityFree}">
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="button" class="btn btn-secondary" onclick="onCloseModal()" data-bs-dismiss="modal">Thoát</button>
                         <button type="submit" class="btn btn-primary">Lưu</button>
                     </div>
                 </form>
@@ -387,6 +417,11 @@
     function getInfoDelete(id, name) {
         document.getElementById("idDelete").value = id;
         document.getElementById("nameDelete").innerText = name;
+    }
+
+    function onCloseModal() {
+        document.getElementById('exampleModal').style.display = 'none';
+        window.location.href = "/facilities/";
     }
 </script>
 </html>

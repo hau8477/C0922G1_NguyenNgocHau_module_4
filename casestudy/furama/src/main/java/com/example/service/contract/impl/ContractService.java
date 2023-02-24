@@ -69,6 +69,11 @@ public class ContractService implements IContractService {
             return false;
         }
 
+        if(contract.getDeposit() < 0){
+            System.err.println("Tiền đặt cọc phải là số dương");
+            return false;
+        }
+
         for (ContractDetailRequestDTO contractDetailRequestDTO : contractDetails) {
             if(contractDetailRequestDTO.getQuantity() <= 0){
                 System.err.println("Số lượng của dịch vụ đi kèm nhỏ hơn 1");

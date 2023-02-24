@@ -18,12 +18,12 @@ public class FacilityService implements IFacilityService {
 
     @Override
     public Page<Facility> findAllByNameContainingAndFacilityType(String name, Long facilityTypeId, Pageable pageable) {
-        return this.facilityRepository.findAllByNameContainingAndFacilityType_Id(name,facilityTypeId,pageable);
+        return this.facilityRepository.findAllByNameContainingAndFacilityType_Id(name, facilityTypeId, pageable);
     }
 
     @Override
     public Page<Facility> findAllByNameContaining(String name, Pageable pageable) {
-        return this.facilityRepository.findAllByNameContaining(name,pageable);
+        return this.facilityRepository.findAllByNameContaining(name, pageable);
     }
 
     @Override
@@ -33,8 +33,10 @@ public class FacilityService implements IFacilityService {
 
     @Override
     public boolean save(Facility facility) {
-        Optional<Facility> optionalFacility = this.facilityRepository.findByName(facility.getName());
-        if (optionalFacility.isPresent()){
+        Facility optionalFacility1 =
+                this.facilityRepository.findByNotId(facility.getName(), facility.getId()).orElse(null);
+
+        if (optionalFacility1 != null) {
             return false;
         }
         this.facilityRepository.save(facility);
@@ -43,9 +45,17 @@ public class FacilityService implements IFacilityService {
 
     @Override
     public boolean update(Facility facility) {
-        Optional<Facility> optionalFacility = this.facilityRepository.findById(facility.getId());
-        Optional<Facility> optionalFacility1 = this.facilityRepository.findByName(facility.getName());
-        if(!optionalFacility.isPresent() || optionalFacility1.isPresent()){
+        Facility optionalFacility = this.facilityRepository.findById(facility.getId()).orElse(null);
+        if (optionalFacility == null) {
+            return false;
+        }
+
+
+
+        Facility optionalFacility1 =
+                this.facilityRepository.findByNotId(optionalFacility.getName(), optionalFacility.getId()).orElse(null);
+
+        if (optionalFacility1 != null) {
             return false;
         }
         this.facilityRepository.save(facility);
@@ -55,7 +65,7 @@ public class FacilityService implements IFacilityService {
     @Override
     public boolean remove(Long id) {
         Optional<Facility> optionalFacility = this.facilityRepository.findById(id);
-        if(!optionalFacility.isPresent()){
+        if (!optionalFacility.isPresent()) {
             return false;
         }
         this.facilityRepository.deleteById(id);
