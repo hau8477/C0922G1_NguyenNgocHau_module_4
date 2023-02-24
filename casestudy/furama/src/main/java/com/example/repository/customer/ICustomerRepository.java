@@ -29,4 +29,10 @@ public interface ICustomerRepository extends JpaRepository<Customer, Long> {
     nativeQuery = true)
     Optional<Customer> findCustomerByIdCardOrEmailOrPhoneNumber(
             @Param("idCard") String idCard,@Param("email") String email,@Param("phoneNumber") String phoneNumber);
+
+    @Query(value = "select * from customer where (id_card = :idCard or email = :email or phone_number = :phoneNumber " +
+            "and flag = true) and id != :id",
+            nativeQuery = true)
+    Optional<Customer> findCustomerByIdCardOrEmailOrPhoneNumberAndNotCustomerId(@Param("id") Long id,
+            @Param("idCard") String idCard,@Param("email") String email,@Param("phoneNumber") String phoneNumber);
 }

@@ -61,9 +61,6 @@ public class CustomerController {
                        @RequestParam(required = false, defaultValue = "0") Long customerTypeId,
                        @PageableDefault(page = 0, size = 5)Pageable pageable,
                        Model model, RedirectAttributes redirectAttributes){
-        //Xóa khoảng trắng đầu cuối của tên
-        customerDTO.setName(customerDTO.getName().trim());
-
         if(bindingResult.hasErrors()){
             Optional<CustomerType> customerType = this.customerTypeService.findById(customerTypeId);
             Page<Customer> customers;
@@ -77,7 +74,7 @@ public class CustomerController {
             model.addAttribute("hasErrors","true");
             model.addAttribute("customers", customers);
             model.addAttribute("customerTypes", this.customerTypeService.findAll());
-            model.addAttribute("customerDTO", new CustomerDTO());
+            model.addAttribute("customerDTO", customerDTO);
             model.addAttribute("nameSearch", nameSearch);
             model.addAttribute("emailSearch", emailSearch);
             model.addAttribute("customerTypeId", customerTypeId);
@@ -103,9 +100,6 @@ public class CustomerController {
                          @RequestParam(required = false, defaultValue = "0") Long customerTypeId,
                          @PageableDefault(page = 0, size = 5)Pageable pageable,
                          Model model, RedirectAttributes redirectAttributes){
-        //Xóa khoảng trắng đầu cuối của tên
-        customerDTO.setName(customerDTO.getName().trim());
-
         if(bindingResult.hasErrors()){
             Optional<CustomerType> customerType = this.customerTypeService.findById(customerTypeId);
             Page<Customer> customers;
@@ -119,7 +113,7 @@ public class CustomerController {
             model.addAttribute("hasErrors","true");
             model.addAttribute("customers", customers);
             model.addAttribute("customerTypes", this.customerTypeService.findAll());
-            model.addAttribute("customerDTO", new CustomerDTO());
+            model.addAttribute("customerDTO", customerDTO);
             model.addAttribute("nameSearch", nameSearch);
             model.addAttribute("emailSearch", emailSearch);
             model.addAttribute("customerTypeId", customerTypeId);

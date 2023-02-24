@@ -48,9 +48,12 @@ public class CustomerService implements ICustomerService {
     @Override
     public boolean update(Customer customer) {
         Optional<Customer> optionalCustomer = this.customerRepository.findById(customer.getId());
-        Optional<Customer> optionalCustomer1 = this.customerRepository.findCustomerByIdCardOrEmailOrPhoneNumber(
-                customer.getIdCard(), customer.getEmail(), customer.getPhoneNumber());
-        if (!optionalCustomer.isPresent() || optionalCustomer1.isPresent()) {
+        if (!optionalCustomer.isPresent()) {
+            return false;
+        }
+        Optional<Customer> optionalCustomer1 = this.customerRepository.findCustomerByIdCardOrEmailOrPhoneNumberAndNotCustomerId(
+                optionalCustomer.get().getId(), customer.getIdCard(), customer.getEmail(), customer.getPhoneNumber());
+        if (optionalCustomer1.isPresent()) {
             return false;
         }
         this.customerRepository.save(customer);

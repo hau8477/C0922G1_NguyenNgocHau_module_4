@@ -9,20 +9,17 @@ public class CustomerDTO{
     private CustomerType customerType;
     @Size(max = 45)
     @NotBlank(message = "Vui lòng nhập tên khách hàng")
-    @Pattern(regexp = "^(?!.*\\d)[\\p{Lu}][\\p{Ll}]*([\\s][\\p{Lu}][\\p{Ll}]*)*$|^([\\p{Lu}][\\p{Ll}]*)$\n",
-            message = "Tên khách hàng chưa đúng định dạng, vd tên đúng định dạng: Nguyen Van A, Nguyễn Văn A")
+    @Pattern(regexp = "^(?!.*\\d)[\\p{Lu}][\\p{Ll}]*([\\s][\\p{Lu}][\\p{Ll}]*)*$|^([\\p{Lu}][\\p{Ll}]*)$", message = "Tên khách hàng chưa đúng định dạng, vd tên đúng định dạng: Nguyen Van A, Nguyễn Văn A")
     private String name;
     private String dateOfBirth;
     private boolean gender;
     @Size(max = 45)
     @NotBlank(message = "Vui lòng nhập số CMND/CCCD")
-    @Pattern(regexp = "", message = "Số CMND/CCCD phải đúng định dạng, vd:XXXXXXXXX hoặc XXXXXXXXXXXX " +
-            "(X là số 0-9, độ dài CMND 9 số, CCCD 12 số).")
+    @Pattern(regexp = "(\\d{9})|(\\d{12})", message = "Số CMND/CCCD phải đúng định dạng, vd:XXXXXXXXX hoặc XXXXXXXXXXXX (X là số 0-9, độ dài CMND 9 số, CCCD 12 số).")
     private String idCard;
     @Size(max = 45)
     @NotBlank(message = "Vui lòng nhập số điện thoại")
-    @Pattern(regexp = "^((\\+?84)|0)(9[01]\\d{7})$", message = "Số điện thoại chưa đúng định dạng, số điện thoại phải có dạng: " +
-            "090xxxxxxx hoặc 091xxxxxxx hoặc +8490xxxxxxx hoặc +8491xxxxxxx.")
+    @Pattern(regexp = "^((\\+?84)|0)(9[01]\\d{7})$", message = "Số điện thoại chưa đúng định dạng, số điện thoại phải có dạng: 090xxxxxxx hoặc 091xxxxxxx hoặc +8490xxxxxxx hoặc +8491xxxxxxx.")
     private String phoneNumber;
     @Size(max = 45)
     @Pattern(regexp = "^[\\w._%+-]+@[\\w.-]+\\.[A-Za-z]{2,}$", message = "Email phải đúng định dạng, vd: hau123@gmail.com")
