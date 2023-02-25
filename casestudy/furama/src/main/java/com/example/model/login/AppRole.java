@@ -1,4 +1,4 @@
-package com.example.model.employee;
+package com.example.model.login;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 
@@ -56,4 +56,5 @@ public class AppRole {
     public void setUserSet(Set<AppUser> userSet) {
         this.userSet = userSet;
     }
+
 }

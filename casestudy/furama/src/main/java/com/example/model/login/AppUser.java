@@ -1,5 +1,7 @@
-package com.example.model.employee;
+package com.example.model.login;
 
+import com.example.model.employee.Employee;
+import com.example.model.login.AppRole;
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 

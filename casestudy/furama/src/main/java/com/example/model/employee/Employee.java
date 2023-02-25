@@ -1,5 +1,7 @@
 package com.example.model.employee;
 
+import com.example.model.login.AppUser;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
