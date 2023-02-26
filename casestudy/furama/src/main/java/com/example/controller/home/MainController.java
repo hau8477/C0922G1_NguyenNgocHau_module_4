@@ -18,15 +18,15 @@ public class MainController {
         return "/login";
     }
 
-    @GetMapping("")
-    public String getPageHome(Model model) {
+    @RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
+    public String getPageHome() {
         return "/home";
     }
 
     @RequestMapping(value = "/logoutSuccessful", method = RequestMethod.GET)
     public String logoutSuccessfulPage(Model model) {
-        model.addAttribute("title", "Logout");
-        return "/logoutSuccessfulPage";
+        model.addAttribute("title", "Đăng xuất thành công!");
+        return "/login";
     }
 
     @RequestMapping(value = "/403", method = RequestMethod.GET)
@@ -40,7 +40,7 @@ public class MainController {
             model.addAttribute("userInfo", userInfo);
 
             String message = "Hi " + principal.getName() //
-                    + "<br> You do not have permission to access this page!";
+                    + "<br> Bạn không có quyền truy cập trang này!";
             model.addAttribute("message", message);
 
         }

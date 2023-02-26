@@ -1,0 +1,27 @@
+<div xmlns:th="http://www.thymeleaf.org"
+     style="border: 1px solid #ccc;padding:5px;margin-bottom:20px;">
+
+  <a th:href="@{/}">Home</a>
+
+  | &nbsp;
+  <a th:href="@{/welcome}">Home</a>
+
+  | &nbsp;
+
+  <a th:href="@{/contracts}">User Info</a>
+
+  | &nbsp;
+
+  <a th:href="@{/facilities}">Admin</a>
+
+  | &nbsp;
+  <a th:href="@{/customers}">Admin</a>
+
+  | &nbsp;
+  <a th:href="@{/employees}">Admin</a>
+
+  | &nbsp;
+
+  <a th:if="${#request.userPrincipal != null}" th:href="@{/logout}">Logout</a>
+
+</div>
