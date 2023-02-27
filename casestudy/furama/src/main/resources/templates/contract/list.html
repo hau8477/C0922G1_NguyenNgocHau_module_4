@@ -589,17 +589,17 @@
         }
     }
 
-    const startDateInput = $('#startDate');
-
-    // Cập nhật thời gian định kỳ
-    setInterval(function() {
-        // Lấy thời gian hiện tại
-        const now = new Date();
-        // Chuyển đổi thời gian thành chuỗi định dạng chuẩn ISO 8601
-        const isoDate = now.toISOString().slice(0,16);
-        // Gán chuỗi định dạng ISO 8601 vào thuộc tính value của ô input datetime-local
-        startDateInput.val(isoDate);
-    }, 1000); // cập nhật thời gian mỗi giây (1000ms)
+    // const startDateInput = $('#startDate');
+    //
+    // // Cập nhật thời gian định kỳ
+    // setInterval(function() {
+    //     // Lấy thời gian hiện tại
+    //     const now = new Date();
+    //     // Chuyển đổi thời gian thành chuỗi định dạng chuẩn ISO 8601
+    //     const isoDate = now.toISOString().slice(0,16);
+    //     // Gán chuỗi định dạng ISO 8601 vào thuộc tính value của ô input datetime-local
+    //     startDateInput.val(isoDate);
+    // }, 1000); // cập nhật thời gian mỗi giây (1000ms)
 
 </script>
 </body>
