@@ -23,9 +23,9 @@ public class MainController {
         return "/home";
     }
 
-    @RequestMapping(value = "/logoutSuccessful", method = RequestMethod.GET)
+    @RequestMapping(value = "/logout", method = RequestMethod.GET)
     public String logoutSuccessfulPage(Model model) {
-        model.addAttribute("title", "Đăng xuất thành công!");
+        model.addAttribute("mess", "Đăng xuất thành công!");
         return "/login";
     }
 

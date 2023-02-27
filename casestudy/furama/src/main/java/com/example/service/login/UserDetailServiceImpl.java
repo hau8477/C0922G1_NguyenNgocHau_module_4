@@ -36,9 +36,11 @@ public class UserDetailServiceImpl implements UserDetailsService {
 
         // [ROLE_USER, ROLE_ADMIN,..]
         List<UserRole> userRoles = this.userRoleRepository.findByAppUser(appUser);
+
         for (UserRole userRole:userRoles) {
             System.err.println(userRole.getAppRole().getName());
         }
+
         List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
         if (userRoles != null) {
             for (UserRole userRole : userRoles) {
@@ -46,6 +48,10 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 GrantedAuthority authority = new SimpleGrantedAuthority(userRole.getAppRole().getName());
                 grantList.add(authority);
             }
+        }
+
+        for (GrantedAuthority grantedAuthority:grantList) {
+            System.err.println(grantedAuthority.getAuthority());
         }
 
         UserDetails userDetails = new User(appUser.getUsername(), //
