@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.security.Principal;
 
@@ -24,8 +25,8 @@ public class MainController {
     }
 
     @RequestMapping(value = "/logout", method = RequestMethod.GET)
-    public String logoutSuccessfulPage(Model model) {
-        model.addAttribute("mess", "Đăng xuất thành công!");
+    public String logoutSuccessfulPage(RedirectAttributes redirectAttributes) {
+        redirectAttributes.addFlashAttribute("mess", "Đăng xuất thành công!");
         return "/login";
     }
 

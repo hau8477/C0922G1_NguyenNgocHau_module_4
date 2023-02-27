@@ -41,11 +41,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // Các trang bắt đầu từ đường dẫn /contracts
         // yêu cầu phải login với vai trò user hoặc admin.
         // Nếu chưa login, nó sẽ redirect tới trang /login.
-        http.authorizeRequests().antMatchers("/contracts/**").access("hasAnyRole('user', 'admin')");
-        http.authorizeRequests().antMatchers("/customers/**").access("hasAnyRole('user', 'admin')");
-
-        // Trang chỉ dành cho ADMIN
-        http.authorizeRequests().antMatchers("/facilities/**").access("hasRole('admin')");
+        http.authorizeRequests().antMatchers("/contracts", "/customers").access("hasAnyRole('user', 'admin')")
+                .antMatchers("/facilities").access("hasRole('admin')")
+                .antMatchers("/contracts/**", "/customers/**").access("hasAnyRole('user', 'admin')")
+                .antMatchers("/facilities/**").access("hasRole('admin')");
 
         // Khi người dùng đã login, với vai trò XX.
         // Nhưng truy cập vào trang yêu cầu vai trò YY,
@@ -67,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // Cấu hình Remember Me.
         http.authorizeRequests().and() //
                 .rememberMe().tokenRepository(this.persistentTokenRepository()) //
-                .tokenValiditySeconds(24 * 60 * 60 * 365); // 24h
+                .tokenValiditySeconds(24 * 60 * 60 * 365); // 1 năm
     }
 
     @Bean

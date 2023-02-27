@@ -24,7 +24,7 @@ public class AppUser {
     @JsonBackReference
     private Employee employee;
 
-    @ManyToMany
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_role",
             joinColumns = @JoinColumn(name = "username"),
             inverseJoinColumns = @JoinColumn(name = "role_id"))
