@@ -18,6 +18,9 @@
         html, body {
             background-image: url(https://toigingiuvedep.vn/wp-content/uploads/2021/11/background-xam-dep-sang-tao-va-an-tuong-nhat.jpg);
         }
+        .user-info {
+            margin-right: 10px;
+        }
     </style>
 
 </head>
@@ -45,6 +48,9 @@
                 </li>
             </ul>
             <form class="d-flex" role="search">
+                <div class="user-info">
+                    <span th:utext="${#request.userPrincipal.getName()}"></span>
+                </div>
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#logoutModal">
                     Đăng xuất
