@@ -75,11 +75,6 @@ public class ContractService implements IContractService {
         }
 
         for (ContractDetailRequestDTO contractDetailRequestDTO : contractDetails) {
-            if(contractDetailRequestDTO.getQuantity() <= 0){
-                System.err.println("Số lượng của dịch vụ đi kèm nhỏ hơn 1");
-                return false;
-            }
-
             Optional<AttachFacility> attachFacility =
                     this.attachFacilityRepository.findById(contractDetailRequestDTO.getId());
 
@@ -87,6 +82,13 @@ public class ContractService implements IContractService {
                 System.err.println("Attach facility không tồn tại");
                 return false;
             }
+
+            if(contractDetailRequestDTO.getQuantity() <= 0){
+                System.err.println("Số lượng của dịch vụ đi kèm nhỏ hơn 1");
+                return false;
+            }
+
+
         }
 
         this.contractRepository.save(contract);
