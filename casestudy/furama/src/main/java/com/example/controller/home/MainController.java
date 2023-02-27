@@ -19,7 +19,12 @@ public class MainController {
         return "/login";
     }
 
-    @RequestMapping(value = { "/", "/welcome" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/welcome" }, method = RequestMethod.GET)
+    public String getPageWelcome() {
+        return "/welcome";
+    }
+
+    @RequestMapping(value = { "/"}, method = RequestMethod.GET)
     public String getPageHome() {
         return "/home";
     }
