@@ -48,7 +48,7 @@
                 </li>
             </ul>
             <form class="d-flex" role="search">
-                <div class="user-info">
+                <div class="user-info" th:if="${#request.userPrincipal != null}">
                     <span th:utext="${#request.userPrincipal.getName()}"></span>
                 </div>
                 <!-- Button trigger modal -->
