@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN"
+            crossorigin="anonymous"></script>
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- jQuery UI -->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
+    <script src="../static/jquery-3.6.3.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/picture">Danh sách tác phẩm</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <li class="nav-item">
+                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        Thêm tranh
+                    </button>
+                </li>
+                <li class="nav-item">
+                </li>
+                <li class="nav-item">
+                </li>
+                <li class="nav-item">
+                </li>
+            </ul>
+            <form method="get" class="d-flex" role="search">
+                <input class="form-control me-2" type="search" placeholder="Tên tác phẩm" aria-label="Search"
+                       name="nameSearch">
+                <select  name="idSearch" class="form-select" aria-label="Default select example">
+                    <option th:each="category : ${categories}" th:text="${category.getName()}"
+                            th:value="${category.getId()}" th:selected="${idSearch == category.getId()}">
+                    </option>
+                </select>
+                <button class="btn btn-outline-success" type="submit">Tìm kiếm</button>
+            </form>
+        </div>
+    </div>
+</nav>
+<p style="color: red" th:text="${mess}"></p>
+<table id="tableService" class="table table-striped">
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>Tên tác phẩm</th>
+        <th>Họa sĩ</th>
+        <th>Năm vẽ</th>
+        <th>Thể loại</th>
+        <th>Kích thước</th>
+        <th>Chức năng</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="picture, iState: ${pictures}">
+        <td th:text="${iState.count}"></td>
+        <td th:text="${picture.getName()}"></td>
+        <td th:text="${picture.getAuthor()}"></td>
+        <td th:text="${picture.getDate()}"></td>
+        <td th:text="${picture.getCategory().getName()}"></td>
+        <td th:text="${picture.getSize()}"></td>
+        <td >
+            <button th:attr="onclick=|getInfoPictureDelete('${picture.getId()}', '${picture.getName()}')|"
+                    type="button" class="btn btn-danger" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal3">
+                Xóa
+            </button>
+        </td>
+    </tr>
+    </tbody>
+</table>
+<nav aria-label="Page navigation example">
+    <ul class="pagination">
+        <li class="page-item">
+            <a class="page-link" th:if="${pictures.hasNext()}"
+               th:href="@{/picture(page=${pictures.number -1},nameSearch=${nameSearch},idSearch=${idSearch})}">Trang trước</a>
+        </li>
+        <li class="page-item"><a class="page-link" th:href="@{/picture(page=0,nameSearch=${nameSearch},idSearch=${idSearch})}">1</a></li>
+        <li class="page-item"><a class="page-link" th:href="@{/picture(page=1,nameSearch=${nameSearch},idSearch=${idSearch})}">2</a></li>
+        <li class="page-item">
+            <a class="page-link" th:if="${pictures.hasNext()}"
+               th:href="@{/picture(page=${pictures.number +1},nameSearch=${nameSearch},idSearch=${idSearch})}">Trang sau</a>
+        </li>
+    </ul>
+</nav>
+
+<!--Modal create-->
+<div
+        th:class="${hasErrors == 'true' ? 'modal fade show' : 'modal fade'}"
+        th:style="${hasErrors == 'true' ? 'display: block' : 'display: none'}" id="exampleModal"
+     tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel1">Thêm mới tranh</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" onclick="onCloseModal()" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/picture/create}" method="post" id="picture" th:object="${pictureDTO}">
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1" class="form-label">Tên tác phẩm</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                               placeholder="VD: Mona Lisa" th:field="*{name}">
+                        <p style="color: red" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"
+                           class="form-text"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail133" class="form-label">Họa sĩ</label>
+                        <input type="text" class="form-control" id="exampleInputEmail133" aria-describedby="emailHelp"
+                               placeholder="VD: Vanga" th:field="*{author}">
+                        <p style="color: red" th:if="${#fields.hasErrors('author')}" th:errors="*{author}"
+                           class="form-text"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="date" class="form-label">Năm vẽ</label>
+                        <input type="datetime-local" class="form-control" id="date" aria-describedby="emailHelp"
+                               placeholder="VD: Vanga" th:field="*{date}">
+                        <p style="color: red" th:if="${#fields.hasErrors('date')}" th:errors="*{date}"
+                           class="form-text"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label for="exampleInputEmail1312" class="form-label">Kích thước</label>
+                        <input type="text" class="form-control" id="exampleInputEmail1312" aria-describedby="emailHelp"
+                               placeholder="VD: Vanga" th:field="*{size}">
+                        <p style="color: red" th:if="${#fields.hasErrors('size')}" th:errors="*{size}"
+                           class="form-text"></p>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Thể loại</label>
+                        <select th:field="*{category}" class="form-select" aria-label="Default select example">
+                            <option th:value="0">Chọn thể loại</option>
+                            <option th:each="category: ${categories}" th:text="${category.getName()}"
+                                    th:value="${category.getId()}"></option>
+                        </select>
+                        <p style="color: red" th:if="${#fields.hasErrors('category')}" th:errors="*{category}"
+                           class="form-text"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" onclick="onCloseModal()" data-bs-dismiss="modal">Thoát
+                        </button>
+                        <button type="button" onclick="checkDate()" class="btn btn-primary" id="submit-btn">Lưu
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Modal delete-->
+<div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel3" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel3">Xóa tác phẩm</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form th:action="@{/picture/delete}" method="post">
+                    <input hidden id="idDelete" name="idDelete">
+                    <span>
+                        Bạn có chắc chắn muốn xóa <span style="color: red" id="nameDelete"></span>
+                    </span>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Thoát</button>
+                        <button type="submit" class="btn btn-primary">Xóa</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script src="/jquery-3.6.3.min.js"></script>
+<script>
+    function onCloseModal() {
+        document.getElementById('exampleModal').style.display = 'none';
+        window.location.href = "/picture";
+    }
+
+    function getInfoPictureDelete(id, name) {
+        document.getElementById("idDelete").value = id;
+        document.getElementById("nameDelete").innerText = name;
+    }
+
+
+    function validateDate(dateString) {
+        // Kiểm tra định dạng ngày giờ
+        var regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
+        if (!regex.test(dateString)) {
+            return false;
+        }
+
+        // Chuyển đổi thành đối tượng Date
+        var date = new Date(dateString);
+
+        // Kiểm tra tính hợp lệ của đối tượng Date
+        if (isNaN(date.getTime())) {
+            return false;
+        }
+
+        return true;
+    }
+
+
+    function checkDate() {
+        var date = $("#date").val();
+        if (!validateDate(date)) {
+            alert("Năm vẽ không hợp lệ!");
+        } else {
+            var currentYear = new Date().getFullYear();
+            var date112 = new Date(currentYear, new Date(date).getMonth(), new Date(date).getDate());
+            if (new Date() < date112) {
+                alert("Ngày tháng năm vẽ phải nhỏ hơn hoặc bằng ngày tháng năm hiện tại")
+            } else {
+                $("#picture").submit();
+            }
+        }
+
+    }
+</script>
+</html>
