@@ -30,6 +30,19 @@ public class CustomerService implements ICustomerService {
     }
 
     @Override
+    public List<Customer> findAllByNameContainingAndEmailContaining1(String name, String email, Pageable pageable) {
+        return null;
+    }
+
+    public List<Customer> findAllByNameContainingAndEmailContaining2(String name, String email) {
+        return this.customerRepository.findAllByNameContainingAndEmailContainingAndCustomerType_Id2(name, email);
+    }
+
+    public List<Customer> findAllByNameContainingAndEmailContainingAndCustomerTypeId1(String name, String email, Long customerTypeId) {
+        return this.customerRepository.findAllByNameContainingAndEmailContainingAndCustomerType_Id1(name, email, customerTypeId);
+    }
+
+    @Override
     public List<Customer> findAll() {
         return this.customerRepository.findAll();
     }
@@ -72,11 +85,12 @@ public class CustomerService implements ICustomerService {
 
     @Override
     public boolean removeById(Long id) {
-        Optional<Customer> optionalCustomer = this.customerRepository.findById(id);
-        if (!optionalCustomer.isPresent()) {
+        Customer optionalCustomer = this.customerRepository.findById(id).orElse(null);
+        if (optionalCustomer == null) {
             return false;
         }
-        this.customerRepository.deleteById(id);
+        optionalCustomer.setFlag(false);
+        this.customerRepository.save(optionalCustomer);
         return true;
     }
 }

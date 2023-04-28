@@ -41,10 +41,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         // Các trang bắt đầu từ đường dẫn /contracts
         // yêu cầu phải login với vai trò user hoặc admin.
         // Nếu chưa login, nó sẽ redirect tới trang /login.
-        http.authorizeRequests().antMatchers("/contracts", "/customers").access("hasAnyRole('user', 'admin')")
-                .antMatchers("/facilities").access("hasRole('admin')")
-                .antMatchers("/contracts/**", "/customers/**").access("hasAnyRole('user', 'admin')")
-                .antMatchers("/facilities/**").access("hasRole('admin')");
+//        http.authorizeRequests().antMatchers("/contracts", "/customers").access("hasAnyRole('user', 'admin')")
+//                .antMatchers("/facilities").access("hasRole('admin')")
+//                .antMatchers("/contracts/**", "/customers/**").access("hasAnyRole('user', 'admin')")
+//                .antMatchers("/facilities/**").access("hasRole('admin')");
 
         // Khi người dùng đã login, với vai trò XX.
         // Nhưng truy cập vào trang yêu cầu vai trò YY,

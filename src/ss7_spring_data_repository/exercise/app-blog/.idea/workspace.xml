@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="1c3f6001-d03b-4dc3-b1d6-36f568a30ba4" name="Changes" comment="" />
+    <list default="true" id="1c3f6001-d03b-4dc3-b1d6-36f568a30ba4" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/../../../../casestudy/furama/src/main/java/com/example/controller/contract/ContractRestController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../../../../casestudy/furama/src/main/java/com/example/controller/customer/CustomerRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../../../casestudy/furama/src/main/java/com/example/configs/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/../../../../casestudy/furama/src/main/java/com/example/configs/WebSecurityConfig.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -32,24 +36,13 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "D:/CodeGym/C0922G1/module4/src/ss7_spring_data_repository/exercise/blog",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)"
   }
 }]]></component>
-  <component name="RunManager">
-    <configuration default="true" type="GroovyScriptRunConfiguration" factoryName="Groovy">
-      <setting name="path" value="" />
-      <setting name="vmparams" value="" />
-      <setting name="params" value="" />
-      <setting name="workDir" value="file://$PROJECT_DIR$" />
-      <setting name="debug" value="false" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -59,6 +52,7 @@
       <option name="presentableId" value="Default" />
       <updated>1675740794867</updated>
       <workItem from="1675740797180" duration="593000" />
+      <workItem from="1678930206707" duration="9000" />
     </task>
     <servers />
   </component>

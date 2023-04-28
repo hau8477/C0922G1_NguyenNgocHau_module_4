@@ -2,7 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="882ea79c-456c-4755-8627-5c29d43e4c48" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/../src/ss8_validation/exercise/song/src/main/resources/templates/home.html" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ss8_validation/exercise/song/src/main/resources/templates/home.html" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/furama/src/main/java/com/example/controller/contract/ContractRestController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/furama/src/main/java/com/example/controller/customer/CustomerRestController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/furama/src/main/java/com/example/controller/customer/CustomerTypeRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/furama/src/main/java/com/example/configs/WebSecurityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/furama/src/main/java/com/example/configs/WebSecurityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/furama/src/main/java/com/example/repository/customer/ICustomerRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/furama/src/main/java/com/example/repository/customer/ICustomerRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/furama/src/main/java/com/example/service/customer/ICustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/furama/src/main/java/com/example/service/customer/ICustomerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/furama/src/main/java/com/example/service/customer/impl/CustomerService.java" beforeDir="false" afterPath="$PROJECT_DIR$/furama/src/main/java/com/example/service/customer/impl/CustomerService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/ss7_spring_data_repository/exercise/app-blog/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../src/ss7_spring_data_repository/exercise/app-blog/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -23,7 +30,7 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/hi/Downloads/c0822g1-nguyen-thi-thuy-nga/module4/case_study_with_ajax",
+    "last_opened_file_path": "D:/CodeGym/C0922G1/module4/src/ss11_web_service/exercise/blog",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.0",
     "project.structure.side.proportion": "0.0"
@@ -38,6 +45,7 @@
       <option name="presentableId" value="Default" />
       <updated>1676261231077</updated>
       <workItem from="1676261232426" duration="35000" />
+      <workItem from="1679044270493" duration="20000" />
     </task>
     <servers />
   </component>

@@ -10,6 +10,11 @@ import java.util.Optional;
 public interface ICustomerService {
     Page<Customer> findAllByNameContainingAndEmailContainingAndCustomerType_Id(String name, String email, Long customerTypeId, Pageable pageable);
     Page<Customer> findAllByNameContainingAndEmailContaining(String name, String email, Pageable pageable);
+
+    List<Customer> findAllByNameContainingAndEmailContaining2(String name, String email);
+    List<Customer> findAllByNameContainingAndEmailContainingAndCustomerTypeId1(String name, String email, Long customerTypeId);
+    List<Customer> findAllByNameContainingAndEmailContaining1(String name, String email, Pageable pageable);
+
     List<Customer> findAll();
 
 
